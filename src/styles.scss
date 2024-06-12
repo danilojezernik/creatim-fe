@@ -1,1 +1,34 @@
-/* You can add global styles to this file, and also import other style files */
+/*
+  Main stylesheet file for global styles.
+  This file can be used to define styles that apply throughout the entire application.
+*/
+
+/*
+  Import Tailwind's base styles, including resets and base elements.
+  This sets up a good foundation for consistent styling.
+*/
+@tailwind base;
+
+/*
+  Import Tailwind's component styles.
+  This includes pre-built utility classes for common UI components.
+*/
+@tailwind components;
+
+/*
+  Import Tailwind's utility classes.
+  These are low-level utility classes that can be combined to build custom designs.
+*/
+@tailwind utilities;
+
+/*
+  Import custom global styles.
+  This is for adding additional global styles only.
+*/
+@import "styles/global";
+
+/*
+  Import custom styles specifically for the spinner component.
+  This ensures that the spinner has its own isolated styles.
+*/
+@import "styles/spinner/spinner";

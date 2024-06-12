@@ -1,0 +1,43 @@
+<!--
+  Angular structural directive *ngIf to conditionally include the content
+  if the peopleAll$ observable emits a value. The async pipe subscribes to the
+  observable and assigns the emitted value to the local variable 'people'.
+-->
+<ng-container *ngIf="peopleAll$ | async as people; else loadingData">
+
+  <!--
+    Structural directive *ngIf to check if the 'people' array has elements.
+    If 'people' is not empty, iterate over the 'people' array.
+    For each element in the array, a <div> with a style is created showing the specific property.
+  -->
+  <ng-container *ngIf="people.length > 0">
+    <div *ngFor="let jedi of people">
+      {{ jedi.name }}
+    </div>
+  </ng-container>
+
+  <!--
+    If the 'people' array is empty, display a message indicating that no data is available.
+  -->
+  <ng-container *ngIf="people.length === 0">
+    No data available
+  </ng-container>
+
+</ng-container>
+
+<!--
+  Define a template reference 'loadingData' that is displayed
+  while the data is being loaded (observable has not emitted a value yet).
+  The <app-spinner> component is displayed based on the 'spinner' boolean variable.
+-->
+<ng-template #loadingData>
+  <app-spinner *ngIf="!spinner"></app-spinner>
+</ng-template>
+
+<!--
+  Display the error message if 'errorMessage' is defined.
+  This is shown if there is an error in fetching the data.
+-->
+<div *ngIf="errorMessage">
+  Error: {{ errorMessage }}
+</div>

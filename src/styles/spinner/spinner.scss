@@ -1,0 +1,82 @@
+/* Ensure the body takes up the full viewport height, centers content both
+   vertically and horizontally, has no default margin, and sets a black background */
+body {
+  display: flex;                 /* Use flexbox for centering */
+  justify-content: center;       /* Center horizontally */
+  align-items: center;           /* Center vertically */
+  height: 100vh;                 /* Full viewport height */
+  margin: 0;                     /* Remove default margin */
+  background-color: #000;        /* Set background color to black */
+}
+
+/* Style for the loader wrapper to position it relative to its normal position
+   and apply a yellow drop shadow */
+.loader_wrapper {
+  display: inline-block;                /* Make the element inline-block */
+  position: relative;                   /* Position relative for child absolute positioning */
+  filter: drop-shadow(0 0 1px yellow);  /* Apply yellow drop shadow */
+}
+
+/* Style for the text inside the loader wrapper to center it absolutely and
+   apply visual styles */
+.text {
+  position: absolute;                 /* Absolute positioning relative to loader_wrapper */
+  top: 50%;                           /* Center vertically */
+  left: 50%;                          /* Center horizontally */
+  transform: translate(-50%, -50%);   /* Adjust position to exact center */
+  font-size: 20px;                    /* Set font size */
+  color: yellow;                      /* Set text color to yellow */
+  text-shadow: 1px 1px 1px black;     /* Apply black shadow to text */
+  animation: blink 1s ease infinite;  /* Apply blinking animation */
+}
+
+/* Style for the loader SVG to set its size and apply a flip animation */
+.loader {
+  width: 100px;                         /* Set width */
+  height: 100px;                        /* Set height */
+  animation: flip 2s linear infinite;   /* Apply flip animation */
+}
+
+/* Style for the path inside the loader to set its stroke and animation */
+.loader path {
+  stroke: black;                                      /* Set stroke color */
+  stroke-width: 30;                                   /* Set stroke width */
+  fill: transparent;                                  /* No fill color */
+  stroke-dasharray: 100px 5px;                        /* Create dashed line effect */
+  animation: spin 1s ease-in-out infinite alternate;  /* Apply spinning animation */
+}
+
+/* Keyframes for the spinning animation of the path */
+@keyframes spin {
+  0% {
+    stroke-dashoffset: 500;      /* Start with dash offset for dashes */
+    opacity: .5;                 /* Start with half opacity */
+  }
+  100% {
+    stroke-dashoffset: 0;        /* End with no dash offset */
+    opacity: 1;                  /* End with full opacity */
+  }
+}
+
+/* Keyframes for the flip animation of the loader */
+@keyframes flip {
+  0% {
+    transform: rotateY(0deg);    /* Start with no rotation */
+  }
+  100% {
+    transform: rotateY(1080deg); /* End with 1080 degrees rotation */
+  }
+}
+
+/* Keyframes for the blink animation of the text */
+@keyframes blink {
+  0% {
+    opacity: .5;                 /* Start with half opacity */
+  }
+  50% {
+    opacity: 1;                  /* Increase to full opacity */
+  }
+  100% {
+    opacity: .5;                 /* End with half opacity */
+  }
+}
