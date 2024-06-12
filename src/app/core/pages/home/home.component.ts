@@ -38,6 +38,7 @@ export class HomeComponent {
      * The map function is used to extract and return the names from the data
      */
     map(data => {
+
       // Hide the spinner as data is received successfully
       this.spinner = false;
 
@@ -45,13 +46,15 @@ export class HomeComponent {
        * Check if data is defined, map over it to extract and return the names
        * If data is not defined, return an empty array
        */
-      return data ? data.map(person => ({ name: person.name })) : [];
-
+      return data ? data.map(person => ({
+        ...person,
+      })) : [];
     }),
     /**
      * Use catchError to handle any errors that occur during data fetching
      */
     catchError(error => {
+
       // Show the spinner if an error occurs
       this.spinner = true;
 
@@ -72,4 +75,5 @@ export class HomeComponent {
      */
     tap(_ => this.spinner = false)
   );
+
 }

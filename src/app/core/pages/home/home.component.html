@@ -12,7 +12,14 @@
   -->
   <ng-container *ngIf="people.length > 0">
     <div *ngFor="let jedi of people">
-      {{ jedi.name }}
+      {{ jedi['name'] }}
+      {{ jedi['height'] }}
+      {{ jedi['mass'] }}
+      {{ jedi['hair_color'] }}
+      {{ jedi['skin_color'] }}
+      {{ jedi['eye_color'] }}
+      {{ jedi['birth_year'] }}
+      {{ jedi['gender'] }}
     </div>
   </ng-container>
 
