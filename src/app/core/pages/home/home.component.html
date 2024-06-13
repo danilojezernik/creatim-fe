@@ -46,12 +46,12 @@
 
           <ng-template #saveCancelBlock>
 
-            <button (click)="saveEdited(i)"
+            <button (click)="cancelEdit(i)"
                     class="bg-edit-bg md:p-edit-bt md:my-6 me-1.5 shadow-edit-btn px-5 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
               Save
             </button>
 
-            <button (click)="cancelEdit(i)"
+            <button (click)="saveEdited(i)"
                     class="bg-cancel-bg md:p-edit-bt md:my-6 shadow-cancel-btn px-5 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
               Cancel
             </button>
@@ -63,7 +63,7 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="people.length === 0">
+  <ng-container *ngIf="people.length === 0 || errorMessage">
     <div class="absolute top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
       <img [src]="noDataDarthVader" alt="Darth Vader">
     </div>
@@ -76,7 +76,3 @@
     <app-spinner *ngIf="spinner"></app-spinner>
   </div>
 </ng-template>
-
-<div *ngIf="errorMessage">
-  Error: {{ errorMessage }}
-</div>

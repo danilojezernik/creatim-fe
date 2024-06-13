@@ -5,8 +5,8 @@ import { catchError, forkJoin, map, Observable, of, tap } from "rxjs"
 import { SpinnerComponent } from "../../../shared/spinner/spinner/spinner.component"
 import { People } from "../../../models/people"
 import { desiredNames, noDataDarthVader } from "../../../shared/global_variables/global.const"
-import { SoundPlayerService } from "../../../services/sound-player/sound-player.service";
-import { FormsModule } from "@angular/forms";
+import { SoundPlayerService } from "../../../services/sound-player/sound-player.service"
+import { FormsModule } from "@angular/forms"
 
 @Component({
   selector: 'app-home',
@@ -17,43 +17,72 @@ import { FormsModule } from "@angular/forms";
 export class HomeComponent implements OnInit {
 
   /**
-   * Inject SwapiService to access its methods.
-   * SwapiService is used to fetch data from the Star Wars API.
+   * Inject SwapiService to access methods for fetching Star Wars API data.
+   * Private access ensures encapsulation and adherence to best practices.
    */
-  private peopleService = inject(SwapiService)
-  private _soundPlayer = inject(SoundPlayerService)
+
+  private _swapService = inject(SwapiService)
+  private _soundPlayerService = inject(SoundPlayerService)
 
   /**
-   * Observable that will emit an array of People objects containing the
-   * data for Yoda, Darth Vader, and Obi-Wan Kenobi.
+   * Constant variable to hold the path for the no data image of Darth Vader.
    */
-  peopleAllThree$!: Observable<People[]>
+  protected readonly noDataDarthVader = noDataDarthVader;
 
-  savedPeople: People[] = []
-  originalPeople: People[] = []
+  /**
+   * Observable that will emit an array of People objects for Yoda, Darth Vader, and Obi-Wan Kenobi.
+   */
+  peopleAllThree$!: Observable<People[]>;
+
+  /**
+   * Arrays to hold the saved and original people data.
+   */
+  savedPeople: People[] = [];
+  originalPeople: People[] = [];
+
+  /**
+   * Variables to store data in localStorage.
+   */
+  localStorageOriginal: any;
+  localStorageSave: any;
 
   /**
    * Variable to hold error messages if any occur during data fetching.
    */
-  errorMessage: string | undefined
+  errorMessage: string | undefined;
+
+  /**
+   * Array to track edit modes for each Jedi card.
+   */
   editModes: boolean[] = [];
+
   /**
    * Boolean variable to control the display of a loading spinner.
    */
-  spinner: boolean = false
+  spinner: boolean = false;
 
   /**
    * OnInit lifecycle hook to initialize the component.
-   * Calls the method to fetch data and subscribes to people observable
-   * to initialize editModes array based on the fetched data length.
+   * Fetches data and subscribes to the people observable to initialize editModes array.
    */
   ngOnInit() {
-    this.getDesiredJedies()
+    this.getDesiredJedies();
 
+    /**
+     * Subscribe to the people observable to initialize data and edit modes.
+     * Clones fetched data to savedPeople and originalPeople arrays for editing functionality.
+     * Saves data in localStorage for persistence across page reloads.
+     */
     this.peopleAllThree$.subscribe(people => {
       this.editModes = new Array(people.length).fill(false); // Initialize editModes array
-      this.savedPeople = [...people]; // Assuming savedPeople is initialized with the fetched data
-      this.originalPeople = people.map(person => ({ ...person }));
+
+      this.savedPeople = [...people]; // Clone fetched data to savedPeople
+      this.localStorageOriginal = JSON.stringify(this.savedPeople);
+      localStorage.setItem('saved', this.localStorageOriginal);
+
+      this.originalPeople = people.map(person => ({ ...person })); // Clone fetched data to originalPeople
+      this.localStorageSave = JSON.stringify(this.originalPeople);
+      localStorage.setItem('original', this.localStorageSave);
     });
   }
 
@@ -62,8 +91,10 @@ export class HomeComponent implements OnInit {
    * @param index The index of the Jedi card to toggle edit mode.
    */
   toggleEditMode(index: number) {
+    /**
+     * Clone the current state of the savedPeople data for the specific index.
+     */
     this.originalPeople[index] = { ...this.savedPeople[index] };
-
     this.editModes[index] = !this.editModes[index]; // Toggle edit mode for the specific Jedi card
   }
 
@@ -71,79 +102,69 @@ export class HomeComponent implements OnInit {
    * Fetches data for the specified names and handles loading state and errors.
    */
   getDesiredJedies() {
+    this.spinner = true; // Show the spinner while loading data
 
     /**
-     * Show the spinner while loading data
-     */
-    this.spinner = true
-
-    /**
-     * Create an array of observables, each fetching data for one name.
-     * Each observable is created using the getAllDataForPeople method of the SwapiService.
-     * The catchError operator logs any errors and returns an empty array,
-     * allowing the observable stream to continue.
+     * Create an array of observables, each fetching data for one name using SwapiService.
+     * Handle errors for each observable, log the error, and return an empty array.
      */
     const observables = desiredNames.map(name =>
-      this.peopleService.getAllDataForPeople(name).pipe(
+      this._swapService.getAllDataForPeople(name).pipe(
         catchError(error => {
-
-          /**
-           * Log error and return an empty array if an error occurs.
-           */
-          console.error('Error fetching data for:', name, error.message)
-          return of([] as People[])
+          console.error('Error fetching data for:', name, error.message);
+          return of([] as People[]);
         })
       )
     );
 
     /**
      * Combine the results of all observables into one observable using forkJoin.
-     * This waits for all observables to complete and then combines their results.
+     * Flatten the array of arrays into a single array.
+     * Hide the spinner once data is loaded.
+     * Play a sound if no data is loaded.
+     * Handle any errors during the combining process.
      */
     this.peopleAllThree$ = forkJoin(observables).pipe(
-      /**
-       * Flatten the array of arrays into a single array.
-       */
-      map(results => results.flat()),
-
-      /**
-       * Hide the spinner once data is loaded.
-       */
+      map(results => results.flat()), // Flatten the array of arrays into a single array
       tap((people) => {
-        this.spinner = false
-        this.savedPeople = people
-        this.originalPeople = people.map(person => ({...person}))
+        this.spinner = false;
+        this.savedPeople = people; // Update savedPeople with loaded data
+        this.originalPeople = people.map(person => ({ ...person })); // Update originalPeople with loaded data
       }),
-
-      /**
-       * Play a sound if no data is loaded.
-       */
       tap((people) => {
-        if (people.length === 0)
-          this._soundPlayer.playSound()
+        if (people.length === 0) {
+          this._soundPlayerService.playSound(); // Play a sound if no data is loaded
+        }
       }),
-
-      /**
-       * Handle any errors during the combining process.
-       * Hide the spinner, set an error message, and return an empty array.
-       */
       catchError(error => {
-        console.error('Error: ', error)
-        this.spinner = false
-        this.errorMessage = 'Failed to load data'
-        return of([] as People[])
+        console.error('Error: ', error);
+        this.spinner = false;
+        this.errorMessage = 'Failed to load data'; // Handle any errors during the combining process
+        return of([] as People[]);
       })
     );
   }
 
-  saveEdited(index: number) {
-    this.editModes[index] = false
-  }
-
+  /**
+   * Method to cancel the edit mode for a specific index.
+   * @param index The index of the Jedi card being edited.
+   */
   cancelEdit(index: number) {
-    this.editModes[index] = false
-    this.savedPeople[index] = { ...this.originalPeople[index] };
+    this.editModes[index] = false; // Exit edit mode for the specific Jedi card
   }
 
-  protected readonly noDataDarthVader = noDataDarthVader;
+  /**
+   * Method to save the edited data for a specific index.
+   * @param index The index of the Jedi card being edited.
+   */
+  saveEdited(index: number) {
+    this.editModes[index] = false; // Exit edit mode for the specific Jedi card
+    this.savedPeople[index] = { ...this.originalPeople[index] };
+
+    // Convert your data to JSON string
+    const dataToStore = JSON.stringify(this.savedPeople);
+    // Store in localStorage under a specific key, for example, 'savedPeople'
+    localStorage.setItem('savedPeople', dataToStore);
+  }
+
 }
