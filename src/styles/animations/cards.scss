@@ -1,0 +1,34 @@
+/**
+ * CSS Animation: fade-in
+ *
+ * Applies a fade-in animation to elements using opacity transition.
+ * Animation duration: 1.2s
+ * Timing function: cubic-bezier(0.390, 0.575, 0.565, 1.000)
+ *
+ * Keyframes:
+ * - Starts with opacity 0% (fully transparent).
+ * - Ends with opacity 100% (fully opaque).
+ */
+
+.fade-in {
+  -webkit-animation: fade-in 1.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+  animation: fade-in 1.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

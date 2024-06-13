@@ -12,7 +12,7 @@
              'darth-vader-bg-img': i === 1 ||  savedPeople[i].name === 'Darth Vader',
              'obi-wan-kenobi-bg-img': i === 2 || savedPeople[i].name === 'Obi-Wan Kenobi'
            }"
-           class="p-6 md:h-614 md:w-283 w-full h-full rounded-[10px] shadow-star-wars-card content-end">
+           class="p-6 md:h-614 md:w-283 w-full h-full rounded-[10px] shadow-star-wars-card content-end fade-in-out">
 
         <!-- Display data or input fields based on edit mode -->
         <div>
@@ -33,19 +33,22 @@
           <!-- Edit mode block with input fields for editing Jedi details -->
           <ng-template #editModeBlock>
             <p class="mb-3 gap-2 md:text-lg text-sm">
-              Name: <input type="text" [(ngModel)]="savedPeople[i].name" class="bg-transparent border-b w-1/4"><br>
+              Name: <input type="text" [(ngModel)]="savedPeople[i].name"
+                           class="bg-transparent border-b w-7/12"><br>
               Height: <input type="text" [(ngModel)]="savedPeople[i].height"
-                             class="bg-transparent border-b w-1/4">cm<br>
-              Mass: <input type="text" [(ngModel)]="savedPeople[i].mass" class="bg-transparent border-b w-1/4">kg<br>
+                             class="bg-transparent border-b w-7/12">cm<br>
+              Mass: <input type="text" [(ngModel)]="savedPeople[i].mass"
+                           class="bg-transparent border-b w-7/12">kg<br>
               Hair color: <input type="text" [(ngModel)]="savedPeople[i].hair_color"
-                                 class="bg-transparent border-b w-1/4"><br>
+                                 class="bg-transparent border-b w-7/12"><br>
               Skin color: <input type="text" [(ngModel)]="savedPeople[i].skin_color"
-                                 class="bg-transparent border-b w-1/4"><br>
+                                 class="bg-transparent border-b w-7/12"><br>
               Eye color: <input type="text" [(ngModel)]="savedPeople[i].eye_color"
-                                class="bg-transparent border-b w-1/4"><br>
+                                class="bg-transparent border-b w-7/12"><br>
               Birth year: <input type="text" [(ngModel)]="savedPeople[i].birth_year"
-                                 class="bg-transparent border-b w-1/4"><br>
-              Gender: <input type="text" [(ngModel)]="savedPeople[i].gender" class="bg-transparent border-b w-1/4"><br>
+                                 class="bg-transparent border-b w-7/12"><br>
+              Gender: <input type="text" [(ngModel)]="savedPeople[i].gender"
+                             class="bg-transparent border-b w-7/12"><br>
             </p>
 
           </ng-template>
@@ -53,7 +56,7 @@
 
         <!-- Edit button or save/cancel buttons based on edit mode -->
         <div class="flex justify-center">
-          <ng-container *ngIf="!editModes[i]; else saveCancelBlock">
+          <ng-container *ngIf="!editModes[i]">
             <!-- Edit button to toggle edit mode -->
             <button (click)="toggleEditMode(i)"
                     class="bg-edit-bg md:p-edit-bt md:my-6 shadow-edit-btn px-10 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
@@ -62,7 +65,7 @@
           </ng-container>
 
           <!-- Save and Cancel buttons block for edit mode -->
-          <ng-template #saveCancelBlock>
+          <ng-container *ngIf="editModes[i]">
 
             <!-- Save button to save changes and exit edit mode -->
             <button (click)="saveEdited(i)"
@@ -75,7 +78,7 @@
                     class="bg-cancel-bg md:p-edit-bt md:my-6 shadow-cancel-btn px-5 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
               Cancel
             </button>
-          </ng-template>
+          </ng-container>
         </div>
 
       </div>
