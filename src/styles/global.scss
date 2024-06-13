@@ -4,6 +4,11 @@ body {
   font-family: 'Droid', serif;
 }
 
+.bg-blur {
+  background-color: transparent;
+  backdrop-filter: blur(90px); /* Adjust the blur amount as needed */
+  -webkit-backdrop-filter: blur(90px); /* For Safari */
+}
 
 /* Flip container */
 .flip-container {

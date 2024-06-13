@@ -1,20 +1,23 @@
+<!-- Container for asynchronously loaded people data -->
 <ng-container *ngIf="peopleAllThree$ | async as people; else loadingData">
 
+  <!-- Container for when people data is successfully loaded and not empty -->
   <ng-container *ngIf="people.length > 0">
     <div class="container relative justify-center flex flex-col gap-6 md:p-52 p-10 md:flex-row">
 
+      <!-- Loop through each person (Jedi) and display their data -->
       <div *ngFor="let jedi of people; let i = index"
            [ngClass]="{
-             'yoda-bg-img': jedi.name === 'Yoda' && !editModes[i],
-             'darth-vader-bg-img': jedi.name === 'Darth Vader' && !editModes[i],
-             'obi-wan-kenobi-bg-img': jedi.name === 'Obi-Wan Kenobi' && !editModes[i],
-             'bg-white': editModes[i]
+             'yoda-bg-img': i === 0 || savedPeople[i].name === 'Yoda',
+             'darth-vader-bg-img': i === 1 ||  savedPeople[i].name === 'Darth Vader',
+             'obi-wan-kenobi-bg-img': i === 2 || savedPeople[i].name === 'Obi-Wan Kenobi'
            }"
            class="p-6 md:h-614 md:w-283 w-full h-full rounded-[10px] shadow-star-wars-card content-end">
 
-        <!-- Display data or inputs based on edit mode -->
+        <!-- Display data or input fields based on edit mode -->
         <div>
           <ng-container *ngIf="!editModes[i]; else editModeBlock">
+            <!-- Display Jedi details when not in edit mode -->
             <p class="mb-3 gap-2 md:text-lg text-sm">
               Name: <b>{{ jedi.name }}</b><br>
               Height: <b>{{ jedi.height }} cm</b><br>
@@ -27,30 +30,47 @@
             </p>
           </ng-container>
 
+          <!-- Edit mode block with input fields for editing Jedi details -->
           <ng-template #editModeBlock>
-            <input type="text" [(ngModel)]="savedPeople[i].name" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6">
-            <input type="text" [(ngModel)]="savedPeople[i].height" class="form-input">
-            <input type="text" [(ngModel)]="savedPeople[i].mass" class="form-input">
-            <!-- Add other input fields as needed -->
+            <p class="mb-3 gap-2 md:text-lg text-sm">
+              Name: <input type="text" [(ngModel)]="savedPeople[i].name" class="bg-transparent border-b w-1/4"><br>
+              Height: <input type="text" [(ngModel)]="savedPeople[i].height"
+                             class="bg-transparent border-b w-1/4">cm<br>
+              Mass: <input type="text" [(ngModel)]="savedPeople[i].mass" class="bg-transparent border-b w-1/4">kg<br>
+              Hair color: <input type="text" [(ngModel)]="savedPeople[i].hair_color"
+                                 class="bg-transparent border-b w-1/4"><br>
+              Skin color: <input type="text" [(ngModel)]="savedPeople[i].skin_color"
+                                 class="bg-transparent border-b w-1/4"><br>
+              Eye color: <input type="text" [(ngModel)]="savedPeople[i].eye_color"
+                                class="bg-transparent border-b w-1/4"><br>
+              Birth year: <input type="text" [(ngModel)]="savedPeople[i].birth_year"
+                                 class="bg-transparent border-b w-1/4"><br>
+              Gender: <input type="text" [(ngModel)]="savedPeople[i].gender" class="bg-transparent border-b w-1/4"><br>
+            </p>
+
           </ng-template>
         </div>
 
-        <!-- Edit button -->
+        <!-- Edit button or save/cancel buttons based on edit mode -->
         <div class="flex justify-center">
           <ng-container *ngIf="!editModes[i]; else saveCancelBlock">
+            <!-- Edit button to toggle edit mode -->
             <button (click)="toggleEditMode(i)"
                     class="bg-edit-bg md:p-edit-bt md:my-6 shadow-edit-btn px-10 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
               Edit
             </button>
           </ng-container>
 
+          <!-- Save and Cancel buttons block for edit mode -->
           <ng-template #saveCancelBlock>
 
+            <!-- Save button to save changes and exit edit mode -->
             <button (click)="saveEdited(i)"
                     class="bg-edit-bg md:p-edit-bt md:my-6 me-1.5 shadow-edit-btn px-5 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
               Save
             </button>
 
+            <!-- Cancel button to discard changes and exit edit mode -->
             <button (click)="cancelEdit(i)"
                     class="bg-cancel-bg md:p-edit-bt md:my-6 shadow-cancel-btn px-5 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
               Cancel
@@ -63,6 +83,7 @@
     </div>
   </ng-container>
 
+  <!-- Container for when people data is empty or there is an error -->
   <ng-container *ngIf="people.length === 0 || errorMessage">
     <div class="absolute top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
       <img [src]="noDataDarthVader" alt="Darth Vader">
@@ -71,6 +92,7 @@
 
 </ng-container>
 
+<!-- Template for displaying loading spinner while data is being fetched -->
 <ng-template #loadingData>
   <div class="absolute top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
     <app-spinner *ngIf="spinner"></app-spinner>

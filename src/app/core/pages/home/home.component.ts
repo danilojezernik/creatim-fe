@@ -73,17 +73,16 @@ export class HomeComponent implements OnInit {
     });
   }
 
-
   /**
    * Method to toggle edit mode for a specific Jedi card based on index
    * @param index The index of the Jedi card to toggle edit mode
    */
   toggleEditMode(index: number) {
+    this.editModes[index] = !this.editModes[index]; // Toggle edit mode for the specific Jedi card
     /**
      * Clone the current state of the savedPeople data for the specific index
      */
     this.originalPeople[index] = { ...this.savedPeople[index] };
-    this.editModes[index] = !this.editModes[index]; // Toggle edit mode for the specific Jedi card
   }
 
   /**
