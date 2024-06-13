@@ -25,11 +25,13 @@ module.exports = {
       // Extend boxShadow utility with custom styles for star wars card and edit button.
       boxShadow: {
         'star-wars-card': '0px 0px 250px 0px #E3D61D66',
-        'edit-btn': '0 0 30px 0 #E3D61D4D'
+        'edit-btn': '0 0 30px 0 #E3D61D4D',
+        'cancel-btn': '0 0 15px 0 #f10e10'
       },
       // Extend colors utility with a custom background color for edit button.
       colors: {
         'edit-bg': '#E3D61D',
+        'cancel-bg': '#f10e10',
       },
       // Extend textColor utility with an important black color variant.
       textColor: {

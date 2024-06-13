@@ -6,11 +6,12 @@ import { SpinnerComponent } from "../../../shared/spinner/spinner/spinner.compon
 import { People } from "../../../models/people"
 import { desiredNames, noDataDarthVader } from "../../../shared/global_variables/global.const"
 import { SoundPlayerService } from "../../../services/sound-player/sound-player.service";
+import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ CommonModule, SpinnerComponent ],
+  imports: [ CommonModule, SpinnerComponent, FormsModule ],
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
@@ -28,12 +29,14 @@ export class HomeComponent implements OnInit {
    */
   peopleAllThree$!: Observable<People[]>
 
+  savedPeople: People[] = []
+  originalPeople: People[] = []
+
   /**
    * Variable to hold error messages if any occur during data fetching.
    */
   errorMessage: string | undefined
   editModes: boolean[] = [];
-
   /**
    * Boolean variable to control the display of a loading spinner.
    */
@@ -49,6 +52,8 @@ export class HomeComponent implements OnInit {
 
     this.peopleAllThree$.subscribe(people => {
       this.editModes = new Array(people.length).fill(false); // Initialize editModes array
+      this.savedPeople = [...people]; // Assuming savedPeople is initialized with the fetched data
+      this.originalPeople = people.map(person => ({ ...person }));
     });
   }
 
@@ -57,6 +62,8 @@ export class HomeComponent implements OnInit {
    * @param index The index of the Jedi card to toggle edit mode.
    */
   toggleEditMode(index: number) {
+    this.originalPeople[index] = { ...this.savedPeople[index] };
+
     this.editModes[index] = !this.editModes[index]; // Toggle edit mode for the specific Jedi card
   }
 
@@ -102,7 +109,11 @@ export class HomeComponent implements OnInit {
       /**
        * Hide the spinner once data is loaded.
        */
-      tap(() => this.spinner = false),
+      tap((people) => {
+        this.spinner = false
+        this.savedPeople = people
+        this.originalPeople = people.map(person => ({...person}))
+      }),
 
       /**
        * Play a sound if no data is loaded.
@@ -125,6 +136,14 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  protected readonly desiredNames = desiredNames;
+  saveEdited(index: number) {
+    this.editModes[index] = false
+  }
+
+  cancelEdit(index: number) {
+    this.editModes[index] = false
+    this.savedPeople[index] = { ...this.originalPeople[index] };
+  }
+
   protected readonly noDataDarthVader = noDataDarthVader;
 }

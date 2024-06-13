@@ -1,15 +1,5 @@
-<!--
-  Angular structural directive *ngIf to conditionally include the content
-  if the peopleAll$ observable emits a value. The async pipe subscribes to the
-  observable and assigns the emitted value to the local variable 'people'.
--->
 <ng-container *ngIf="peopleAllThree$ | async as people; else loadingData">
 
-  <!--
-    Structural directive *ngIf to check if the 'people' array has elements.
-    If 'people' is not empty, iterate over the 'people' array.
-    For each element in the array, a <div> with a style is created showing the specific property.
-  -->
   <ng-container *ngIf="people.length > 0">
     <div class="container relative justify-center flex flex-col gap-6 md:p-52 p-10 md:flex-row">
 
@@ -22,38 +12,57 @@
            }"
            class="p-6 md:h-614 md:w-283 w-full h-full rounded-[10px] shadow-star-wars-card content-end">
 
+        <!-- Display data or inputs based on edit mode -->
         <div>
-          <p class="mb-3 gap-2 md:text-lg text-sm" >
-            Name: <b>{{ jedi['name'] }}</b><br>
-            Height: <b>{{ jedi['height'] }} cm</b><br>
-            Mass: <b>{{ jedi['mass'] }} kg</b><br>
-            Hair color: <b>{{ jedi['hair_color'] }}</b><br>
-            Skin color: <b>{{ jedi['skin_color'] }}</b><br>
-            Eye color: <b>{{ jedi['eye_color'] }}</b><br>
-            Birth year: <b>{{ jedi['birth_year'] }}</b><br>
-            Gender: <b>{{ jedi['gender'] }}</b><br>
-          </p>
+          <ng-container *ngIf="!editModes[i]; else editModeBlock">
+            <p class="mb-3 gap-2 md:text-lg text-sm">
+              Name: <b>{{ jedi.name }}</b><br>
+              Height: <b>{{ jedi.height }} cm</b><br>
+              Mass: <b>{{ jedi.mass }} kg</b><br>
+              Hair color: <b>{{ jedi.hair_color }}</b><br>
+              Skin color: <b>{{ jedi.skin_color }}</b><br>
+              Eye color: <b>{{ jedi.eye_color }}</b><br>
+              Birth year: <b>{{ jedi.birth_year }}</b><br>
+              Gender: <b>{{ jedi.gender }}</b><br>
+            </p>
+          </ng-container>
+
+          <ng-template #editModeBlock>
+            <input type="text" [(ngModel)]="savedPeople[i].name" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6">
+            <input type="text" [(ngModel)]="savedPeople[i].height" class="form-input">
+            <input type="text" [(ngModel)]="savedPeople[i].mass" class="form-input">
+            <!-- Add other input fields as needed -->
+          </ng-template>
         </div>
 
-        <!--
-          Center the 'Edit' button within its parent div using flexbox properties.
-        -->
+        <!-- Edit button -->
         <div class="flex justify-center">
-          <button (click)="toggleEditMode(i)"
-                  class="bg-edit-bg md:p-edit-bt md:my-6 shadow-edit-btn px-10 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
-            Edit
-          </button>
+          <ng-container *ngIf="!editModes[i]; else saveCancelBlock">
+            <button (click)="toggleEditMode(i)"
+                    class="bg-edit-bg md:p-edit-bt md:my-6 shadow-edit-btn px-10 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
+              Edit
+            </button>
+          </ng-container>
+
+          <ng-template #saveCancelBlock>
+
+            <button (click)="saveEdited(i)"
+                    class="bg-edit-bg md:p-edit-bt md:my-6 me-1.5 shadow-edit-btn px-5 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
+              Save
+            </button>
+
+            <button (click)="cancelEdit(i)"
+                    class="bg-cancel-bg md:p-edit-bt md:my-6 shadow-cancel-btn px-5 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
+              Cancel
+            </button>
+          </ng-template>
         </div>
 
       </div>
 
     </div>
-
   </ng-container>
 
-  <!--
-    If the 'people' array is empty, display a picture of Dart Vader and play a sound.
-  -->
   <ng-container *ngIf="people.length === 0">
     <div class="absolute top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
       <img [src]="noDataDarthVader" alt="Darth Vader">
@@ -62,21 +71,12 @@
 
 </ng-container>
 
-<!--
-  Define a template reference 'loadingData' that is displayed
-  while the data is being loaded (observable has not emitted a value yet).
-  The <app-spinner> component is displayed based on the 'spinner' boolean variable.
--->
 <ng-template #loadingData>
   <div class="absolute top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
     <app-spinner *ngIf="spinner"></app-spinner>
   </div>
 </ng-template>
 
-<!--
-  Display the error message if 'errorMessage' is defined.
-  This is shown if there is an error in fetching the data.
--->
 <div *ngIf="errorMessage">
   Error: {{ errorMessage }}
 </div>
