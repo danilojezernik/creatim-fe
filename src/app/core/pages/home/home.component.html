@@ -12,45 +12,34 @@
              'darth-vader-bg-img': i === 1 ||  savedPeople[i].name === 'Darth Vader',
              'obi-wan-kenobi-bg-img': i === 2 || savedPeople[i].name === 'Obi-Wan Kenobi'
            }"
-           class="p-6 md:h-614 md:w-283 w-full h-full rounded-[10px] shadow-star-wars-card content-end fade-in-out">
+           class="p-6 md:h-614 md:w-283 w-full h-full rounded-[10px] shadow-star-wars-card content-end fade-in">
 
         <!-- Display data or input fields based on edit mode -->
         <div>
           <ng-container *ngIf="!editModes[i]; else editModeBlock">
             <!-- Display Jedi details when not in edit mode -->
-            <p class="mb-3 gap-2 md:text-lg text-sm">
-              Name: <b>{{ jedi.name }}</b><br>
-              Height: <b>{{ jedi.height }} cm</b><br>
-              Mass: <b>{{ jedi.mass }} kg</b><br>
-              Hair color: <b>{{ jedi.hair_color }}</b><br>
-              Skin color: <b>{{ jedi.skin_color }}</b><br>
-              Eye color: <b>{{ jedi.eye_color }}</b><br>
-              Birth year: <b>{{ jedi.birth_year }}</b><br>
-              Gender: <b>{{ jedi.gender }}</b><br>
+            <p class="gap-2 md:text-lg text-sm">
+
+              <!-- Loop through jediDetails array to display details -->
+              <ng-container *ngFor="let detail of editFields">
+                {{ detail.label }}:
+                <!-- Display corresponding property from jedi object and show suffix if not empty -->
+                <b> {{ jedi[detail.modelProperty] }} {{ detail.suffix }}</b><br>
+              </ng-container>
+
             </p>
           </ng-container>
 
           <!-- Edit mode block with input fields for editing Jedi details -->
           <ng-template #editModeBlock>
-            <p class="mb-3 gap-2 md:text-lg text-sm">
-              Name: <input type="text" [(ngModel)]="savedPeople[i].name"
-                           class="bg-transparent border-b w-7/12"><br>
-              Height: <input type="text" [(ngModel)]="savedPeople[i].height"
-                             class="bg-transparent border-b w-7/12">cm<br>
-              Mass: <input type="text" [(ngModel)]="savedPeople[i].mass"
-                           class="bg-transparent border-b w-7/12">kg<br>
-              Hair color: <input type="text" [(ngModel)]="savedPeople[i].hair_color"
-                                 class="bg-transparent border-b w-7/12"><br>
-              Skin color: <input type="text" [(ngModel)]="savedPeople[i].skin_color"
-                                 class="bg-transparent border-b w-7/12"><br>
-              Eye color: <input type="text" [(ngModel)]="savedPeople[i].eye_color"
-                                class="bg-transparent border-b w-7/12"><br>
-              Birth year: <input type="text" [(ngModel)]="savedPeople[i].birth_year"
-                                 class="bg-transparent border-b w-7/12"><br>
-              Gender: <input type="text" [(ngModel)]="savedPeople[i].gender"
-                             class="bg-transparent border-b w-7/12"><br>
-            </p>
-
+            <ng-container *ngFor="let editField of editFields">
+              <p class="gap-2 md:text-lg text-sm">
+                {{ editField.label }}:
+                <input type="text" [(ngModel)]="savedPeople[i][editField.modelProperty]"
+                       class="bg-transparent border-b w-7/12 font-bold"> {{ editField.suffix}}
+                <br>
+              </p>
+            </ng-container>
           </ng-template>
         </div>
 
@@ -66,7 +55,6 @@
 
           <!-- Save and Cancel buttons block for edit mode -->
           <ng-container *ngIf="editModes[i]">
-
             <!-- Save button to save changes and exit edit mode -->
             <button (click)="saveEdited(i)"
                     class="bg-edit-bg md:p-edit-bt md:my-6 me-1.5 shadow-edit-btn px-5 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
@@ -80,9 +68,7 @@
             </button>
           </ng-container>
         </div>
-
       </div>
-
     </div>
   </ng-container>
 
@@ -92,7 +78,6 @@
       <img [src]="noDataDarthVader" alt="Darth Vader">
     </div>
   </ng-container>
-
 </ng-container>
 
 <!-- Template for displaying loading spinner while data is being fetched -->

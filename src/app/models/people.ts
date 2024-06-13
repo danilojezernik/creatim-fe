@@ -52,4 +52,9 @@ export interface People {
    */
   gender: string
 
+  /**
+   * Index signature to allow dynamic property access
+   */
+  [key: string]: any;
+
 }

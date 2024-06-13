@@ -37,8 +37,21 @@ export class HomeComponent implements OnInit {
   savedPeople: People[] = [];
   originalPeople: People[] = [];
 
-  localStorageOriginal: any
-  localStorageSave: any
+  /**
+   * Array defining editable fields for Jedi details.
+   * Each object in the array specifies a label and the corresponding property in the 'People' object.
+   */
+  editFields = [
+    { label: 'Name', modelProperty: 'name', suffix: '' },
+    { label: 'Height', modelProperty: 'height', suffix: 'cm' },
+    { label: 'Mass', modelProperty: 'mass', suffix: 'kg' },
+    { label: 'Hair color', modelProperty: 'hair_color', suffix: '' },
+    { label: 'Skin color', modelProperty: 'skin_color', suffix: '' },
+    { label: 'Eye color', modelProperty: 'eye_color', suffix: '' },
+    { label: 'Birth year', modelProperty: 'birth_year', suffix: '' },
+    { label: 'Gender', modelProperty: 'gender', suffix: '' }
+  ];
+
   /**
    * Variable to hold error messages if any occur during data fetching
    */
@@ -60,29 +73,6 @@ export class HomeComponent implements OnInit {
    */
   ngOnInit() {
     this.getDesiredJedies();
-
-    /**
-     * Subscribe to the people observable to initialize data and edit modes
-     */
-    this.peopleAllThree$.subscribe(people => {
-
-      this.editModes = new Array(people.length).fill(false); // Initialize editModes array
-      this.savedPeople = [...people]; // Clone fetched data to savedPeople
-      this.originalPeople = people.map(person => ({ ...person })); // Clone fetched data to originalPeople
-
-    });
-  }
-
-  /**
-   * Method to toggle edit mode for a specific Jedi card based on index
-   * @param index The index of the Jedi card to toggle edit mode
-   */
-  toggleEditMode(index: number) {
-    this.editModes[index] = !this.editModes[index]; // Toggle edit mode for the specific Jedi card
-    /**
-     * Clone the current state of the savedPeople data for the specific index
-     */
-    this.originalPeople[index] = { ...this.savedPeople[index] };
   }
 
   /**
@@ -121,14 +111,11 @@ export class HomeComponent implements OnInit {
       tap((people) => {
         this.spinner = false;
         this.savedPeople = people; // Update savedPeople with loaded data
-
         this.originalPeople = people.map(person => ({ ...person })); // Update originalPeople with loaded data
-      }),
 
-      /**
-       * Play a sound if no data is loaded
-       */
-      tap((people) => {
+        /**
+         * Play a sound if no data is loaded
+         */
         if (people.length === 0) {
           this._soundPlayer.playSound();
         }
@@ -140,10 +127,22 @@ export class HomeComponent implements OnInit {
       catchError(error => {
         console.error('Error: ', error);
         this.spinner = false;
-        this.errorMessage = 'Failed to load data';
+        this.errorMessage = '';
         return of([] as People[]);
       })
     );
+  }
+
+  /**
+   * Method to toggle edit mode for a specific Jedi card based on index
+   * @param index The index of the Jedi card to toggle edit mode
+   */
+  toggleEditMode(index: number) {
+    this.editModes[index] = !this.editModes[index]; // Toggle edit mode for the specific Jedi card
+    /**
+     * Clone the current state of the savedPeople data for the specific index
+     */
+    this.originalPeople[index] = { ...this.savedPeople[index] };
   }
 
   /**
