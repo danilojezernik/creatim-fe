@@ -15,7 +15,7 @@
 
       <div *ngFor="let jedi of people"
            [ngClass]="{'yoda-bg-img': jedi['name'] === 'Yoda', 'darth-vader-bg-img' : jedi['name'] === 'Darth Vader', 'obi-wan-kenobi-bg-img' : jedi['name'] === 'Obi-Wan Kenobi' }"
-           class="p-6 rounded-lg shadow">
+           class="p-6 rounded-lg shadow-star-wars">
 
         <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
           Name: {{ jedi['name'] }}<br>
