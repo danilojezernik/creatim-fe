@@ -1,17 +1,20 @@
-<!--
+<div class="md:container md:mx-auto">
+  <!--
   Custom component for the application header. The <app-header> component
   is included to display the header section of the application. This component
   will remain static and visible across different routes, providing a consistent
   navigation and branding area at the top of the page.
 -->
-<app-header></app-header>
+  <app-header></app-header>
 
-<!--
-  Placeholder for the Angular router to render the matched component
-  based on the current route. The <router-outlet> directive acts as a
-  placeholder that Angular dynamically fills based on the application's
-  routing configuration. The component corresponding to the current URL
-  path will be displayed here.
--->
-<router-outlet></router-outlet>
+  <!--
+    Placeholder for the Angular router to render the matched component
+    based on the current route. The <router-outlet> directive acts as a
+    placeholder that Angular dynamically fills based on the application's
+    routing configuration. The component corresponding to the current URL
+    path will be displayed here.
+  -->
+  <router-outlet></router-outlet>
+</div>
+
 

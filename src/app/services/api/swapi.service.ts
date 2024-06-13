@@ -1,8 +1,8 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { catchError, map, Observable, throwError } from "rxjs";
-import { People } from "../../models/people";
-import { environment } from "../../../environments/environment";
+import { inject, Injectable } from '@angular/core'
+import { HttpClient, HttpErrorResponse } from "@angular/common/http"
+import { catchError, map, Observable, throwError } from "rxjs"
+import { People } from "../../models/people"
+import { environment } from "../../../environments/environment"
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class SwapiService {
   /**
    * Inject HttpClient instance for making HTTP requests
    */
-  private _http = inject(HttpClient);
+  private _http = inject(HttpClient)
 
   /**
    * Method to get all people data from the SWAPI API
@@ -36,11 +36,11 @@ export class SwapiService {
        */
       catchError((error: HttpErrorResponse) => {
         // Handle the error based on your application's requirements
-        console.error('Error fetching data:', error.message);
+        console.error('Error fetching data:', error.message)
         // Throwing a custom error message to be caught by the component
-        return throwError('Data not available. Please try again later or contact us.');
+        return throwError('Data not available. Please try again later or contact us.')
       })
-    );
+    )
   }
 
   /**
@@ -66,10 +66,10 @@ export class SwapiService {
        */
       catchError((error: HttpErrorResponse) => {
         // Handle the error based on your application's requirements
-        console.error('Error fetching data:', error.message);
+        console.error('Error fetching data:', error.message)
         // Throwing a custom error message to be caught by the component
-        return throwError('Data not available. Please try again later or contact us.');
+        return throwError('Data not available. Please try again later or contact us.')
       })
-    );
+    )
   }
 }

@@ -1,34 +1,46 @@
 /*
   Main stylesheet file for global styles.
-  This file can be used to define styles that apply throughout the entire application.
+  This file defines styles that apply throughout the entire application.
 */
 
 /*
   Import Tailwind's base styles, including resets and base elements.
-  This sets up a good foundation for consistent styling.
+  Provides a foundation for consistent styling across different browsers.
 */
 @tailwind base;
 
 /*
   Import Tailwind's component styles.
-  This includes pre-built utility classes for common UI components.
+  Includes pre-built utility classes for common UI components.
 */
 @tailwind components;
 
 /*
   Import Tailwind's utility classes.
-  These are low-level utility classes that can be combined to build custom designs.
+  Low-level utility classes that can be combined to create custom designs.
 */
 @tailwind utilities;
 
 /*
   Import custom global styles.
-  This is for adding additional global styles only.
+  Additional global styles specific to the application.
 */
 @import "styles/global";
 
 /*
   Import custom styles specifically for the spinner component.
-  This ensures that the spinner has its own isolated styles.
+  Ensures the spinner component has its own isolated styles.
 */
 @import "styles/spinner/spinner";
+
+/*
+  Import custom font styles.
+  Includes specific styles related to typography and fonts used in the application.
+*/
+@import "styles/font";
+
+/*
+  Import custom styles for card backgrounds.
+  Specific styles applied to backgrounds of card components.
+*/
+@import "styles/image/card-background";

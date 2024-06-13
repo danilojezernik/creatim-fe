@@ -1,0 +1,15 @@
+/**
+ * Define a custom font face for DroidSans.ttf
+ */
+@font-face {
+  font-family: 'Droid'; /* Name the font family as 'Droid' */
+  src: url(../assets/font/DroidSans.ttf) format("opentype"); /* Specify the path to the font file and its format */
+}
+
+/**
+ * Define a custom font face for DroidSans-Bold.ttf
+ */
+@font-face {
+  font-family: 'Droid-Bold'; /* Name the font family as 'Droid_Bold' */
+  src: url(../assets/font/DroidSans-Bold.ttf) format("opentype"); /* Specify the path to the font file and its format */
+}

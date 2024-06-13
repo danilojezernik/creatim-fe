@@ -1,0 +1,25 @@
+/*
+  Styles for background images of specific character cards.
+  Each class applies a different character's image as a background.
+*/
+
+/* Yoda background image */
+.yoda-bg-img {
+  background-image: url('../../assets/media/cards/yoda.png');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Darth Vader background image */
+.darth-vader-bg-img {
+  background-image: url('../../assets/media/cards/darth-vader.png');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Obi-Wan Kenobi background image */
+.obi-wan-kenobi-bg-img {
+  background-image: url('../../assets/media/cards/obi-wan-kenobi.png');
+  background-size: cover;
+  background-position: center;
+}

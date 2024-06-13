@@ -11,17 +11,30 @@
     For each element in the array, a <div> with a style is created showing the specific property.
   -->
   <ng-container *ngIf="people.length > 0">
-    <div class="absolute">
-      <div *ngFor="let jedi of people">
-        {{ jedi['name'] }}
-        {{ jedi['height'] }}
-        {{ jedi['mass'] }}
-        {{ jedi['hair_color'] }}
-        {{ jedi['skin_color'] }}
-        {{ jedi['eye_color'] }}
-        {{ jedi['birth_year'] }}
-        {{ jedi['gender'] }}
+    <div class="absolute flex flex-row gap-6">
+
+      <div *ngFor="let jedi of people"
+           [ngClass]="{'yoda-bg-img': jedi['name'] === 'Yoda', 'darth-vader-bg-img' : jedi['name'] === 'Darth Vader', 'obi-wan-kenobi-bg-img' : jedi['name'] === 'Obi-Wan Kenobi' }"
+           class="p-6 rounded-lg shadow">
+
+        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+          Name: {{ jedi['name'] }}<br>
+          Height: {{ jedi['height'] }}<br>
+          Mass: {{ jedi['mass'] }}<br>
+          Hair color: {{ jedi['hair_color'] }}<br>
+          Skin color: {{ jedi['skin_color'] }}<br>
+          Eye color: {{ jedi['eye_color'] }}<br>
+          Birth year: {{ jedi['birth_year'] }}<br>
+          Gender: {{ jedi['gender'] }}<br>
+        </p>
+
+        <a href="#"
+           class="bg-edit-bg inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          Edit
+        </a>
+
       </div>
+
     </div>
 
   </ng-container>
@@ -42,7 +55,7 @@
 -->
 <ng-template #loadingData>
   <div class="relative top-2/4 left-2/4">
-    <app-spinner *ngIf="!spinner"></app-spinner>
+    <app-spinner *ngIf="spinner"></app-spinner>
   </div>
 </ng-template>
 
