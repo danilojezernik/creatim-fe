@@ -3,7 +3,7 @@
   if the peopleAll$ observable emits a value. The async pipe subscribes to the
   observable and assigns the emitted value to the local variable 'people'.
 -->
-<ng-container *ngIf="peopleAll$ | async as people; else loadingData">
+<ng-container *ngIf="peopleAllThree$ | async as people; else loadingData">
 
   <!--
     Structural directive *ngIf to check if the 'people' array has elements.
@@ -11,16 +11,19 @@
     For each element in the array, a <div> with a style is created showing the specific property.
   -->
   <ng-container *ngIf="people.length > 0">
-    <div *ngFor="let jedi of people">
-      {{ jedi['name'] }}
-      {{ jedi['height'] }}
-      {{ jedi['mass'] }}
-      {{ jedi['hair_color'] }}
-      {{ jedi['skin_color'] }}
-      {{ jedi['eye_color'] }}
-      {{ jedi['birth_year'] }}
-      {{ jedi['gender'] }}
+    <div class="absolute">
+      <div *ngFor="let jedi of people">
+        {{ jedi['name'] }}
+        {{ jedi['height'] }}
+        {{ jedi['mass'] }}
+        {{ jedi['hair_color'] }}
+        {{ jedi['skin_color'] }}
+        {{ jedi['eye_color'] }}
+        {{ jedi['birth_year'] }}
+        {{ jedi['gender'] }}
+      </div>
     </div>
+
   </ng-container>
 
   <!--
@@ -38,7 +41,9 @@
   The <app-spinner> component is displayed based on the 'spinner' boolean variable.
 -->
 <ng-template #loadingData>
-  <app-spinner *ngIf="!spinner"></app-spinner>
+  <div class="relative top-2/4 left-2/4">
+    <app-spinner *ngIf="!spinner"></app-spinner>
+  </div>
 </ng-template>
 
 <!--

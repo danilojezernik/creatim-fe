@@ -2,7 +2,6 @@
    and apply a yellow drop shadow */
 .loader_wrapper {
   display: inline-block;                /* Make the element inline-block */
-  position: relative;                   /* Position relative for child absolute positioning */
   filter: drop-shadow(0 0 1px yellow);  /* Apply yellow drop shadow */
 }
 
