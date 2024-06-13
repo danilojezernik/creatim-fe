@@ -4,7 +4,7 @@ import { SwapiService } from "../../../services/api/swapi.service"
 import { catchError, forkJoin, map, Observable, of, tap } from "rxjs"
 import { SpinnerComponent } from "../../../shared/spinner/spinner/spinner.component"
 import { People } from "../../../models/people"
-import { desiredNames } from "../../../shared/global_variables/global.const"
+import { desiredNames, noDataDarthVader } from "../../../shared/global_variables/global.const"
 import { SoundPlayerService } from "../../../services/sound-player/sound-player.service";
 
 @Component({
@@ -32,6 +32,7 @@ export class HomeComponent implements OnInit {
    * Variable to hold error messages if any occur during data fetching.
    */
   errorMessage: string | undefined
+  editModes: boolean[] = [];
 
   /**
    * Boolean variable to control the display of a loading spinner.
@@ -40,11 +41,24 @@ export class HomeComponent implements OnInit {
 
   /**
    * OnInit lifecycle hook to initialize the component.
+   * Calls the method to fetch data and subscribes to people observable
+   * to initialize editModes array based on the fetched data length.
    */
   ngOnInit() {
     this.getDesiredJedies()
+
+    this.peopleAllThree$.subscribe(people => {
+      this.editModes = new Array(people.length).fill(false); // Initialize editModes array
+    });
   }
 
+  /**
+   * Method to toggle edit mode for a specific Jedi card based on index.
+   * @param index The index of the Jedi card to toggle edit mode.
+   */
+  toggleEditMode(index: number) {
+    this.editModes[index] = !this.editModes[index]; // Toggle edit mode for the specific Jedi card
+  }
 
   /**
    * Fetches data for the specified names and handles loading state and errors.
@@ -88,7 +102,7 @@ export class HomeComponent implements OnInit {
       /**
        * Hide the spinner once data is loaded.
        */
-      tap(_ => this.spinner = false),
+      tap(() => this.spinner = false),
 
       /**
        * Play a sound if no data is loaded.
@@ -97,6 +111,7 @@ export class HomeComponent implements OnInit {
         if (people.length === 0)
           this._soundPlayer.playSound()
       }),
+
       /**
        * Handle any errors during the combining process.
        * Hide the spinner, set an error message, and return an empty array.
@@ -110,4 +125,6 @@ export class HomeComponent implements OnInit {
     );
   }
 
+  protected readonly desiredNames = desiredNames;
+  protected readonly noDataDarthVader = noDataDarthVader;
 }

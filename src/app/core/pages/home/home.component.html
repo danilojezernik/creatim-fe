@@ -13,12 +13,17 @@
   <ng-container *ngIf="people.length > 0">
     <div class="container relative justify-center flex flex-col gap-6 md:p-52 p-10 md:flex-row">
 
-      <div *ngFor="let jedi of people"
-           [ngClass]="{'yoda-bg-img': jedi['name'] === 'Yoda', 'darth-vader-bg-img' : jedi['name'] === 'Darth Vader', 'obi-wan-kenobi-bg-img' : jedi['name'] === 'Obi-Wan Kenobi' }"
+      <div *ngFor="let jedi of people; let i = index"
+           [ngClass]="{
+             'yoda-bg-img': jedi.name === 'Yoda' && !editModes[i],
+             'darth-vader-bg-img': jedi.name === 'Darth Vader' && !editModes[i],
+             'obi-wan-kenobi-bg-img': jedi.name === 'Obi-Wan Kenobi' && !editModes[i],
+             'bg-white': editModes[i]
+           }"
            class="p-6 md:h-614 md:w-283 w-full h-full rounded-[10px] shadow-star-wars-card content-end">
 
         <div>
-          <p class="mb-3 font-normal gap-2 md:text-lg text-sm">
+          <p class="mb-3 gap-2 md:text-lg text-sm" >
             Name: <b>{{ jedi['name'] }}</b><br>
             Height: <b>{{ jedi['height'] }} cm</b><br>
             Mass: <b>{{ jedi['mass'] }} kg</b><br>
@@ -34,8 +39,8 @@
           Center the 'Edit' button within its parent div using flexbox properties.
         -->
         <div class="flex justify-center">
-          <button
-            class="bg-edit-bg md:p-edit-bt md:my-6 shadow-edit-btn px-10 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
+          <button (click)="toggleEditMode(i)"
+                  class="bg-edit-bg md:p-edit-bt md:my-6 shadow-edit-btn px-10 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
             Edit
           </button>
         </div>
@@ -47,11 +52,11 @@
   </ng-container>
 
   <!--
-    If the 'people' array is empty, display a message indicating that no data is available.
+    If the 'people' array is empty, display a picture of Dart Vader and play a sound.
   -->
   <ng-container *ngIf="people.length === 0">
     <div class="absolute top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-      <img src="./assets/media/no-data/darth-vader-no-data.png" alt="Darth Vader">
+      <img [src]="noDataDarthVader" alt="Darth Vader">
     </div>
   </ng-container>
 

@@ -51,4 +51,5 @@ export interface People {
    * Example: "male", "female", "n/a"
    */
   gender: string
+
 }

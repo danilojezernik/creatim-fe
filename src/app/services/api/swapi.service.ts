@@ -25,7 +25,7 @@ export class SwapiService {
      * Make an HTTP GET request to the SWAPI people endpoint with search parameter
      * The expected response type is an object containing a 'results' array of People
      */
-    return this._http.get<{ results: People[] }>(`${environment.url}/people/?search=${name}`).pipe(
+    return this._http.get<{ results: People[] }>(`${environment.url}/?search=${name}`).pipe(
       /**
        * Use map operator to extract the 'results' array from the response
        */

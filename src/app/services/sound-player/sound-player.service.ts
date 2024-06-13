@@ -20,6 +20,7 @@ export class SoundPlayerService {
    * Plays the loaded sound using the Howl instance.
    */
   playSound() {
+    this.sound.load();
     this.sound.play();
   }
 }
