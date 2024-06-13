@@ -5,6 +5,7 @@ import { catchError, forkJoin, map, Observable, of, tap } from "rxjs"
 import { SpinnerComponent } from "../../../shared/spinner/spinner/spinner.component"
 import { People } from "../../../models/people"
 import { desiredNames } from "../../../shared/global_variables/global.const"
+import { SoundPlayerService } from "../../../services/sound-player/sound-player.service";
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,8 @@ export class HomeComponent implements OnInit {
    * Inject SwapiService to access its methods.
    * SwapiService is used to fetch data from the Star Wars API.
    */
-  private _peopleService = inject(SwapiService)
+  private peopleService = inject(SwapiService)
+  private _soundPlayer = inject(SoundPlayerService)
 
   /**
    * Observable that will emit an array of People objects containing the
@@ -43,6 +45,7 @@ export class HomeComponent implements OnInit {
     this.getDesiredJedies()
   }
 
+
   /**
    * Fetches data for the specified names and handles loading state and errors.
    */
@@ -60,7 +63,7 @@ export class HomeComponent implements OnInit {
      * allowing the observable stream to continue.
      */
     const observables = desiredNames.map(name =>
-      this._peopleService.getAllDataForPeople(name).pipe(
+      this.peopleService.getAllDataForPeople(name).pipe(
         catchError(error => {
 
           /**
@@ -85,8 +88,15 @@ export class HomeComponent implements OnInit {
       /**
        * Hide the spinner once data is loaded.
        */
-      tap(() => this.spinner = false),
+      tap(_ => this.spinner = false),
 
+      /**
+       * Play a sound if no data is loaded.
+       */
+      tap((people) => {
+        if (people.length === 0)
+          this._soundPlayer.playSound()
+      }),
       /**
        * Handle any errors during the combining process.
        * Hide the spinner, set an error message, and return an empty array.

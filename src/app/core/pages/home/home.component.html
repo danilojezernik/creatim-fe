@@ -11,27 +11,34 @@
     For each element in the array, a <div> with a style is created showing the specific property.
   -->
   <ng-container *ngIf="people.length > 0">
-    <div class="absolute flex flex-row gap-6">
+    <div class="container relative justify-center flex flex-col gap-6 md:p-52 p-10 md:flex-row">
 
       <div *ngFor="let jedi of people"
            [ngClass]="{'yoda-bg-img': jedi['name'] === 'Yoda', 'darth-vader-bg-img' : jedi['name'] === 'Darth Vader', 'obi-wan-kenobi-bg-img' : jedi['name'] === 'Obi-Wan Kenobi' }"
-           class="p-6 rounded-lg shadow-star-wars">
+           class="p-6 md:h-614 md:w-283 w-full h-full rounded-[10px] shadow-star-wars-card content-end">
 
-        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-          Name: {{ jedi['name'] }}<br>
-          Height: {{ jedi['height'] }}<br>
-          Mass: {{ jedi['mass'] }}<br>
-          Hair color: {{ jedi['hair_color'] }}<br>
-          Skin color: {{ jedi['skin_color'] }}<br>
-          Eye color: {{ jedi['eye_color'] }}<br>
-          Birth year: {{ jedi['birth_year'] }}<br>
-          Gender: {{ jedi['gender'] }}<br>
-        </p>
+        <div>
+          <p class="mb-3 font-normal gap-2 md:text-lg text-sm">
+            Name: <b>{{ jedi['name'] }}</b><br>
+            Height: <b>{{ jedi['height'] }} cm</b><br>
+            Mass: <b>{{ jedi['mass'] }} kg</b><br>
+            Hair color: <b>{{ jedi['hair_color'] }}</b><br>
+            Skin color: <b>{{ jedi['skin_color'] }}</b><br>
+            Eye color: <b>{{ jedi['eye_color'] }}</b><br>
+            Birth year: <b>{{ jedi['birth_year'] }}</b><br>
+            Gender: <b>{{ jedi['gender'] }}</b><br>
+          </p>
+        </div>
 
-        <a href="#"
-           class="bg-edit-bg inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-          Edit
-        </a>
+        <!--
+          Center the 'Edit' button within its parent div using flexbox properties.
+        -->
+        <div class="flex justify-center">
+          <button
+            class="bg-edit-bg md:p-edit-bt md:my-6 shadow-edit-btn px-10 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
+            Edit
+          </button>
+        </div>
 
       </div>
 
@@ -43,7 +50,9 @@
     If the 'people' array is empty, display a message indicating that no data is available.
   -->
   <ng-container *ngIf="people.length === 0">
-    No data available
+    <div class="absolute top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <img src="./assets/media/no-data/darth-vader-no-data.png" alt="Darth Vader">
+    </div>
   </ng-container>
 
 </ng-container>
@@ -54,7 +63,7 @@
   The <app-spinner> component is displayed based on the 'spinner' boolean variable.
 -->
 <ng-template #loadingData>
-  <div class="relative top-2/4 left-2/4">
+  <div class="absolute top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
     <app-spinner *ngIf="spinner"></app-spinner>
   </div>
 </ng-template>
