@@ -27,7 +27,6 @@ export class SoundPlayerService {
    * Plays the 'no data' sound effect using the Howl instance.
    */
   playSoundNoData() {
-    this.soundNoData.load();
     this.soundNoData.play();
   }
 
@@ -35,7 +34,6 @@ export class SoundPlayerService {
    * Plays the 'name change' sound effect using the Howl instance.
    */
   playSoundNameChange() {
-    this.soundNameChange.load();
     this.soundNameChange.play();
   }
 }

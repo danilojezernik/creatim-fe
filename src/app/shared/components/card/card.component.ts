@@ -78,5 +78,9 @@ export class CardComponent {
     this.cancelEdit.emit(this.index);
   }
 
+  /**
+   * Text for buttons used in the component.
+   * Uses predefined text values from the global constants.
+   */
   protected readonly buttonText = buttonText;
 }
