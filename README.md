@@ -5,6 +5,9 @@
 [![instagram](https://img.shields.io/badge/instagram-red?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/danilojezernik)
 
 This is example application of my assignment for Creatim.
+
+Website url: [Creatim assignment](http://creatim.danilojezernik.com/)
+
 Application is about showing Yoda, Darth Vader and Obi-Wan Kenobi Star Wars characters and their respective details.
 The application utilizes the Star Wars API (https://swapi.dev/) to dynamically fetch and display data about these iconic characters. 
 Data retrieval is optimized using localStorage to store information locally. 
