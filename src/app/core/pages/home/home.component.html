@@ -6,7 +6,7 @@
     <div class="container relative justify-center flex flex-col gap-6 md:p-52 p-10 md:flex-row">
 
       <!-- Loop through each person (Jedi) and display their data -->
-      <div *ngFor="let jedi of people; let i = index"
+      <div *ngFor="let jedi of people.slice(0, 3); let i = index"
            [ngClass]="{
              'yoda-bg-img': i === 0 || savedPeople[i].name === 'Yoda',
              'darth-vader-bg-img': i === 1 ||  savedPeople[i].name === 'Darth Vader',
