@@ -14,6 +14,7 @@ import { SoundPlayerService } from "../../../services/sound-player/sound-player.
 import { FormsModule } from "@angular/forms"
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { LocalStorageService } from "../../../services/local-storage/local-storage.service";
+import { CardComponent } from "../../../shared/components/card/card.component";
 
 /**
  * HomeComponent represents the main component of the application.
@@ -24,7 +25,7 @@ import { LocalStorageService } from "../../../services/local-storage/local-stora
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ CommonModule, SpinnerComponent, FormsModule ],
+  imports: [ CommonModule, SpinnerComponent, FormsModule, CardComponent ],
   templateUrl: './home.component.html',
   animations: [
     trigger('rotate', [
@@ -43,6 +44,7 @@ export class HomeComponent implements OnInit {
   /** Inject SoundPlayerService instance for playing sound effects */
   private _soundPlayer = inject(SoundPlayerService)
 
+  /** Injects an instance of LocalStorageService for handling local storage operations. */
   private _localStorageService = inject(LocalStorageService)
 
   /** Observable to hold data for Yoda, Darth Vader, and Obi-Wan Kenobi */
@@ -147,8 +149,9 @@ export class HomeComponent implements OnInit {
 
         // Play a sound if no data is fetched
         if (people.length === 0) {
-          this._soundPlayer.playSound();
+          this._soundPlayer.playSoundNoData();
         }
+
       }),
       catchError(error => {
         // Handle errors during data fetching
@@ -160,7 +163,14 @@ export class HomeComponent implements OnInit {
     );
   }
 
-
+  /**
+   * Determines the rotation state of a card based on its edit mode.
+   * If the card is in edit mode, it returns 'rotated', otherwise 'default'.
+   * This method is used to control the CSS class for card rotation animations.
+   *
+   * @param index - The index of the card in the array.
+   * @returns The rotation state as a string, either 'rotated' or 'default'.
+   */
   getRotationState(index: number): string {
     return this.editModes[index] ? 'rotated' : 'default';
   }
@@ -179,11 +189,20 @@ export class HomeComponent implements OnInit {
    * @param index The index of the Jedi card being edited.
    */
   saveEdited(index: number) {
-    this.editModes[index] = false // Exit edit mode
-    this.savedPeople[index] = { ...this.savedPeople[index] } // Save edited data
+    this.editModes[index] = false; // Exit edit mode
+
+    // Save edited data
+    const editedPerson = { ...this.savedPeople[index] };
+    this.savedPeople[index] = editedPerson;
 
     // Update localStorage with savedPeople data
-    this._localStorageService.setSavedPeople(LocalStorageKeys.SAVED_PEOPLE, this.savedPeople)
+    this._localStorageService.setSavedPeople(LocalStorageKeys.SAVED_PEOPLE, this.savedPeople);
+
+    // Check if name has changed
+    if (editedPerson.name !== this.originalPeople[index].name) {
+      // Play sound indicating name change
+      this._soundPlayer.playSoundNameChange();
+    }
   }
 
   /**

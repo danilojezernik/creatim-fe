@@ -36,3 +36,14 @@ export const editFields = [
 export enum LocalStorageKeys {
   SAVED_PEOPLE = 'savedPeople' // Key used to store and retrieve the array of saved people
 }
+
+/**
+ * Enum for button texts used in the application.
+ * This enum defines the texts used for different buttons such as save, edit, and cancel.
+ * Using an enum helps to maintain consistency and avoid hardcoding string literals.
+ */
+export enum buttonText {
+  SAVE = 'save',
+  EDIT = 'edit',
+  CANCEL = 'Cancel'
+}

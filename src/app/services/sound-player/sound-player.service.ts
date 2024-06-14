@@ -10,17 +10,32 @@ import { Howl } from "howler";
 export class SoundPlayerService {
 
   /**
-   * Initialize a new Howl instance with the path to the sound file.
+   * Initialize a new Howl instance with the path to the 'no data' sound file.
    */
-  sound = new Howl({
+  soundNoData = new Howl({
     src: ['assets/sound/destroy.mp3']
-  })
+  });
 
   /**
-   * Plays the loaded sound using the Howl instance.
+   * Initialize a new Howl instance with the path to the 'name change' sound file.
    */
-  playSound() {
-    this.sound.load();
-    this.sound.play();
+  soundNameChange = new Howl({
+    src: ['assets/sound/traitor-no-name-change.mp3']
+  });
+
+  /**
+   * Plays the 'no data' sound effect using the Howl instance.
+   */
+  playSoundNoData() {
+    this.soundNoData.load();
+    this.soundNoData.play();
+  }
+
+  /**
+   * Plays the 'name change' sound effect using the Howl instance.
+   */
+  playSoundNameChange() {
+    this.soundNameChange.load();
+    this.soundNameChange.play();
   }
 }

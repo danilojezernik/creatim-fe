@@ -1,0 +1,57 @@
+<!-- Front side of the card, shown when not in edit mode - START -->
+<div class="front" *ngIf="!editMode">
+  <p class="gap-2 md:text-lg text-sm">
+
+    <!-- Loop through editFields to display details - START -->
+    <ng-container *ngFor="let detail of editFields">
+      {{ detail.label }}:
+      <b> {{ jedi[detail.modelProperty] }} {{ detail.suffix }}</b><br>
+    </ng-container>
+    <!-- Loop through editFields to display details - END -->
+
+  </p>
+  <div class="flex justify-center">
+
+    <!-- Edit button to toggle edit mode - START -->
+    <button (click)="toggleEditMode()"
+            class="bg-edit-bg md:p-edit-bt md:my-6 shadow-edit-btn px-10 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
+      {{ buttonText.EDIT }}
+    </button>
+    <!-- Edit button to toggle edit mode - END -->
+
+  </div>
+</div>
+<!-- Front side of the card, shown when not in edit mode - END -->
+
+<!-- Back side of the card, shown when in edit mode - START -->
+<div class="back" *ngIf="editMode">
+
+  <!-- Loop through editFields to display input fields for editing - START -->
+  <ng-container *ngFor="let editField of editFields">
+    <p class="gap-2 fade-in md:text-lg text-sm">
+      {{ editField.label }}:
+      <input type="text" [(ngModel)]="jedi[editField.modelProperty]"
+             class="bg-transparent border-b w-7/12 font-bold"> {{ editField.suffix }}
+      <br>
+    </p>
+  </ng-container>
+  <!-- Loop through editFields to display input fields for editing - END -->
+
+  <div class="flex justify-center">
+    <!-- Save button to save edited data - START -->
+    <button (click)="saveEdited()"
+            class="bg-edit-bg md:p-edit-bt md:my-6 me-1.5 shadow-edit-btn px-5 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
+      {{ buttonText.SAVE }}
+    </button>
+    <!-- Save button to save edited data - END -->
+
+    <!-- Cancel button to discard changes - START -->
+    <button (click)="cancelEdited()"
+            class="bg-cancel-bg md:p-edit-bt md:my-6 shadow-cancel-btn px-5 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
+      {{ buttonText.CANCEL }}
+    </button>
+    <!-- Cancel button to discard changes - END -->
+
+  </div>
+</div>
+<!-- Back side of the card, shown when in edit mode - END -->
