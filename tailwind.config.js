@@ -31,7 +31,7 @@ module.exports = {
       // Extend colors utility with a custom background color for edit button.
       colors: {
         'edit-bg': '#E3D61D',
-        'cancel-bg': '#f10e10',
+        'cancel-bg': '#de1b1c',
       },
       // Extend textColor utility with an important black color variant.
       textColor: {

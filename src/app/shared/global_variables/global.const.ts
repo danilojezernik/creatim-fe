@@ -43,7 +43,7 @@ export enum LocalStorageKeys {
  * Using an enum helps to maintain consistency and avoid hardcoding string literals.
  */
 export enum buttonText {
-  SAVE = 'save',
-  EDIT = 'edit',
+  SAVE = 'Save',
+  EDIT = 'Edit',
   CANCEL = 'Cancel'
 }

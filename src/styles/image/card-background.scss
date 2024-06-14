@@ -5,22 +5,15 @@
 
 /* Yoda background image */
 .yoda-bg-img {
-  background-image: url('../../assets/media/cards/yoda.png');
-  background-color: transparent;
-  background-size: cover;
-  background-position: center;
+  background: url('../../assets/media/cards/yoda.png') center/cover;
 }
 
 /* Darth Vader background image */
 .darth-vader-bg-img {
-  background-image: url('../../assets/media/cards/darth-vader.png');
-  background-size: cover;
-  background-position: center;
+  background: url('../../assets/media/cards/darth-vader.png') center/cover;
 }
 
 /* Obi-Wan Kenobi background image */
 .obi-wan-kenobi-bg-img {
-  background-image: url('../../assets/media/cards/obi-wan-kenobi.png');
-  background-size: cover;
-  background-position: center;
+  background: url('../../assets/media/cards/obi-wan-kenobi.png') center/cover;
 }
