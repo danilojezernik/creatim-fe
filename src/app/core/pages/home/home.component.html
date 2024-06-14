@@ -1,78 +1,64 @@
-<!-- Container for asynchronously loaded people data -->
 <ng-container *ngIf="peopleAllThree$ | async as people; else loadingData">
-
-  <!-- Container for when people data is successfully loaded and not empty -->
+  <!-- Container to display data when it is successfully loaded and not empty -->
   <ng-container *ngIf="people.length > 0">
-    <div class="container relative justify-center flex flex-col gap-6 md:p-52 p-10 md:flex-row">
-
-      <!-- Loop through each person (Jedi) and display their data -->
+    <div class="container justify-center flex flex-col gap-6 md:p-52 p-10 md:flex-row">
+      <!-- Loop through the first three people and display their data -->
       <div *ngFor="let jedi of people.slice(0, 3); let i = index"
            [ngClass]="{
              'yoda-bg-img': i === 0 || savedPeople[i].name === 'Yoda',
-             'darth-vader-bg-img': i === 1 ||  savedPeople[i].name === 'Darth Vader',
-             'obi-wan-kenobi-bg-img': i === 2 || savedPeople[i].name === 'Obi-Wan Kenobi'
+             'darth-vader-bg-img': i === 1 || savedPeople[i].name === 'Darth Vader',
+             'obi-wan-kenobi-bg-img': i === 2 || savedPeople[i].name === 'Obi-Wan Kenobi',
+             'rotated': isRotated
            }"
-           class="p-6 md:h-614 md:w-283 w-full h-full rounded-[10px] shadow-star-wars-card content-end fade-in">
+           class="p-6 md:h-614 md:w-283 w-full h-full rounded-[10px] shadow-star-wars-card content-end fade-in rotate-card"
+           [@rotate]="getRotationState(i)">
 
-        <!-- Display data or input fields based on edit mode -->
-        <div>
-          <ng-container *ngIf="!editModes[i]; else editModeBlock">
-            <!-- Display Jedi details when not in edit mode -->
-            <p class="gap-2 md:text-lg text-sm">
-
-              <!-- Loop through jediDetails array to display details -->
-              <ng-container *ngFor="let detail of editFields">
-                {{ detail.label }}:
-                <!-- Display corresponding property from jedi object and show suffix if not empty -->
-                <b> {{ jedi[detail.modelProperty] }} {{ detail.suffix }}</b><br>
-              </ng-container>
-
-            </p>
-          </ng-container>
-
-          <!-- Edit mode block with input fields for editing Jedi details -->
-          <ng-template #editModeBlock>
-            <ng-container *ngFor="let editField of editFields">
-              <p class="gap-2 md:text-lg text-sm">
-                {{ editField.label }}:
-                <input type="text" [(ngModel)]="savedPeople[i][editField.modelProperty]"
-                       class="bg-transparent border-b w-7/12 font-bold"> {{ editField.suffix}}
-                <br>
-              </p>
+        <!-- Front side of the card, shown when not in edit mode -->
+        <div class="front" *ngIf="!editModes[i]">
+          <p class="gap-2 md:text-lg text-sm">
+            <!-- Loop through editFields to display details -->
+            <ng-container *ngFor="let detail of editFields">
+              {{ detail.label }}:
+              <b> {{ jedi[detail.modelProperty] }} {{ detail.suffix }}</b><br>
             </ng-container>
-          </ng-template>
-        </div>
-
-        <!-- Edit button or save/cancel buttons based on edit mode -->
-        <div class="flex justify-center">
-          <ng-container *ngIf="!editModes[i]">
+          </p>
+          <div class="flex justify-center">
             <!-- Edit button to toggle edit mode -->
             <button (click)="toggleEditMode(i)"
                     class="bg-edit-bg md:p-edit-bt md:my-6 shadow-edit-btn px-10 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
               Edit
             </button>
-          </ng-container>
+          </div>
+        </div>
 
-          <!-- Save and Cancel buttons block for edit mode -->
-          <ng-container *ngIf="editModes[i]">
-            <!-- Save button to save changes and exit edit mode -->
+        <!-- Back side of the card, shown when in edit mode -->
+        <div class="back" *ngIf="editModes[i]">
+          <!-- Loop through editFields to display input fields for editing -->
+          <ng-container *ngFor="let editField of editFields">
+            <p class="gap-2 fade-in md:text-lg text-sm">
+              {{ editField.label }}:
+              <input type="text" [(ngModel)]="savedPeople[i][editField.modelProperty]"
+                     class="bg-transparent border-b w-7/12 font-bold"> {{ editField.suffix }}
+              <br>
+            </p>
+          </ng-container>
+          <div class="flex justify-center">
+            <!-- Save button to save edited data -->
             <button (click)="saveEdited(i)"
                     class="bg-edit-bg md:p-edit-bt md:my-6 me-1.5 shadow-edit-btn px-5 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
               Save
             </button>
-
-            <!-- Cancel button to discard changes and exit edit mode -->
+            <!-- Cancel button to discard changes -->
             <button (click)="cancelEdit(i)"
                     class="bg-cancel-bg md:p-edit-bt md:my-6 shadow-cancel-btn px-5 py-2 font-bold text-black-imp inline-flex md:text-2xl text-md items-center text-center rounded-lg">
               Cancel
             </button>
-          </ng-container>
+          </div>
         </div>
       </div>
     </div>
   </ng-container>
-
-  <!-- Container for when people data is empty or there is an error -->
+  <!-- Container to display an image if no data is available or there is an error -->
   <ng-container *ngIf="people.length === 0 || errorMessage">
     <div class="absolute top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
       <img [src]="noDataDarthVader" alt="Darth Vader">
@@ -80,7 +66,7 @@
   </ng-container>
 </ng-container>
 
-<!-- Template for displaying loading spinner while data is being fetched -->
+<!-- Template to display a loading spinner while data is being fetched -->
 <ng-template #loadingData>
   <div class="absolute top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
     <app-spinner *ngIf="spinner"></app-spinner>

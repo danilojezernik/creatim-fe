@@ -11,8 +11,8 @@
  */
 
 .fade-in {
-  -webkit-animation: fade-in 1.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
-  animation: fade-in 1.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+  -webkit-animation: fade-in 2s cubic-bezier(0.500, 0.575, 0.565, 1.000) both;
+  animation: fade-in 2s cubic-bezier(0.500, 0.575, 0.565, 1.000) both;
 }
 
 @-webkit-keyframes fade-in {
@@ -30,5 +30,74 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+/**
+ * Styles for the rotating card.
+ * - Positions the card relative to its container.
+ * - Sets the width and height to fill the container.
+ * - Enables 3D transformations.
+ * - Adds a smooth transition for the transform property.
+ */
+.rotate-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+/**
+ * Styles for the content inside the rotating card.
+ * - Positions the content absolutely within the card.
+ * - Sets the width and height to fill the card.
+ * - Hides the backface of the content to prevent it from showing when rotated.
+ */
+.rotate-card .card-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+/**
+ * Sets the initial state of the front side of the card.
+ * The front side is not rotated.
+ */
+.rotate-card .front {
+  transform: rotateY(0deg);
+}
+
+/**
+ * Sets the initial state of the back side of the card.
+ * The back side is rotated 180 degrees around the Y-axis.
+ */
+.rotate-card .back {
+  transform: rotateY(180deg);
+}
+
+/**
+ * Styles for the rotated state of the card.
+ * - Rotates the card 180 degrees around the Y-axis.
+ * - Mirrors the card along the Y-axis for compatibility with the 3D effect.
+ * - Adds a vendor prefix for compatibility with older browsers.
+ */
+.rotate-card {
+  &.rotated {
+    transform: rotateY(180deg) scale(-1, 1); // This rotates and mirrors the element
+    -webkit-transform: rotateY(180deg) scale(-1, 1); // For compatibility with older browsers
+  }
+}
+
+/**
+ * Styles for the default state of the card.
+ * - Ensures the card is not rotated and is mirrored along the Y-axis.
+ * - Adds a vendor prefix for compatibility with older browsers.
+ */
+.rotate-card {
+  &.default {
+    transform: rotateY(0deg) scale(-1, 1); // This rotates and mirrors the element
+    -webkit-transform: rotateY(0deg) scale(-1, 1); // For compatibility with older browsers
   }
 }
