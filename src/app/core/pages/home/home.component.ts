@@ -4,7 +4,7 @@ import { SwapiService } from "../../../services/api/swapi.service"
 import { catchError, forkJoin, map, Observable, of, tap } from "rxjs"
 import { SpinnerComponent } from "../../../shared/spinner/spinner/spinner.component"
 import { People } from "../../../models/people"
-import { desiredNames, noDataDarthVader, editFields } from "../../../shared/global_variables/global.const"
+import { desiredNames, editFields, noDataDarthVader } from "../../../shared/global_variables/global.const"
 import { SoundPlayerService } from "../../../services/sound-player/sound-player.service"
 import { FormsModule } from "@angular/forms"
 import { animate, state, style, transition, trigger } from "@angular/animations";
@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit {
   errorMessage: string | undefined
 
   /** Array to track the edit mode status for each Jedi card */
-  editModes: boolean[] = [false, false, false]
+  editModes: boolean[] = [ false, false, false ]
 
   /** Boolean variable to control the display of the loading spinner */
   spinner: boolean = false
@@ -72,88 +72,96 @@ export class HomeComponent implements OnInit {
    * Handles loading state, errors, and local storage operations.
    */
   getDesiredJedies() {
-    this.spinner = true // Show loading spinner while fetching data
+    // Set spinner to true to show loading spinner while fetching data
+    this.spinner = true;
 
-    // Fetch savedPeople array from local storage
-    const savedPeopleFromLocalStorage$ = of(JSON.parse(localStorage.getItem('savedPeople') || '[]'))
+    /**
+     * Observable to fetch saved people data from local storage.
+     * Uses 'of' to create an observable from the saved people data in local storage,
+     * or an empty array if no data is found.
+     */
+    const savedPeopleFromLocalStorage$ = of(JSON.parse(localStorage.getItem('savedPeople') || '[]'));
 
-    // Create observables to fetch data for each name in desiredNames array
+    /**
+     * Create an array of observables, each fetching data for a specific Jedi name.
+     * If an error occurs while fetching data for a specific name, it logs the error and returns an empty array.
+     */
     const observables = desiredNames.map(name =>
       this._peopleService.getAllDataForPeople(name).pipe(
         catchError(error => {
-          console.error('Error fetching data for:', name, error.message)
-          return of([] as People[]) // Return empty array in case of error
+          console.error('Error fetching data for:', name, error.message);
+          return of([] as People[]); // Return empty array in case of error
         })
       )
-    )
+    );
 
-    // Combine observables to fetch data from both local storage and SWAPI API
-    const combinedObservables = [ savedPeopleFromLocalStorage$, ...observables ]
+    /**
+     * Combine the observable fetching data from local storage with the observables fetching data from the SWAPI API.
+     * This ensures that data is fetched from both sources.
+     */
+    const combinedObservables = [ savedPeopleFromLocalStorage$, ...observables ];
 
-    // Combine results from observables and handle them
+    /**
+     * Use forkJoin to combine the results from all observables.
+     * Map the results to merge unique data from both local storage and API responses.
+     */
     this.peopleAllThree$ = forkJoin(combinedObservables).pipe(
       map(results => {
-        // Extract data from local storage and API responses
-        const localStorageData = results[0] as People[]
 
-        console.log('Local storage data: ', localStorageData)
+        // Extract data from local storage
+        const localStorageData = results[0] as People[];
+        console.log('Local storage data: ', localStorageData);
 
-        const apiData = results.slice(1).flat() as People[]
+        // Extract data from API responses
+        const apiData = results.slice(1).flat() as People[];
+        console.log('API data: ', apiData);
 
-        console.log('API data: ', apiData)
+        // Create an array to store unique people data, starting with local storage data
+        const uniquePeople = [ ...localStorageData ];
+        console.log('Unique data: ', uniquePeople);
 
-        // Merge unique data from both sources
-        const uniquePeople = [ ...localStorageData ]
-
-        console.log('Unique data: ', uniquePeople)
-
+        /**
+         * Iterate over API data and check if each person is already in the uniquePeople array.
+         * If not, add them to ensure uniqueness based on name.
+         */
         apiData.forEach(person => {
-          /**
-           * Check if the person from API data is already in uniquePeople array.
-           * If not, add them to ensure uniqueness based on name.
-           */
           if (!uniquePeople.some(p => p.name === person.name)) {
-            uniquePeople.push(person)
+            uniquePeople.push(person);
           }
-        })
+        });
 
-        console.log('Unique data 2: ', uniquePeople)
-
-        return uniquePeople
+        console.log('Unique data 2: ', uniquePeople);
+        return uniquePeople;
       }),
       tap((people) => {
+
         // Update component state after data is fetched successfully
-        this.spinner = false
-        this.savedPeople = people
-        this.originalPeople = people.map(person => ({ ...person }))
-        localStorage.setItem('savedPeople', JSON.stringify(people))
+        this.spinner = false; // Hide loading spinner
+        this.savedPeople = people; // Update savedPeople array
+        this.originalPeople = people.map(person => ({ ...person })); // Store a copy of original data
+        localStorage.setItem('savedPeople', JSON.stringify(people)); // Save data to local storage
 
-        console.log('this.people: ', this.savedPeople)
-        console.log('this original people: ', this.originalPeople)
+        console.log('this.people: ', this.savedPeople);
+        console.log('this original people: ', this.originalPeople);
 
-        // Play sound if no data is fetched
+        // Play a sound if no data is fetched
         if (people.length === 0) {
-          this._soundPlayer.playSound()
+          this._soundPlayer.playSound();
         }
       }),
       catchError(error => {
         // Handle errors during data fetching
-        console.error('Error: ', error)
-        this.spinner = false
-        this.errorMessage = '' // Clear errorMessage
-        return of([] as People[])
+        console.error('Error: ', error);
+        this.spinner = false; // Hide loading spinner
+        this.errorMessage = ''; // Clear error message
+        return of([] as People[]); // Return an empty array in case of error
       })
-    )
+    );
   }
+
 
   getRotationState(index: number): string {
     return this.editModes[index] ? 'rotated' : 'default';
-  }
-
-  isRotated = false;
-
-  toggleRotation() {
-    this.isRotated = !this.isRotated;
   }
 
   /**

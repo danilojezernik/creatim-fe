@@ -7,8 +7,7 @@
            [ngClass]="{
              'yoda-bg-img': i === 0 || savedPeople[i].name === 'Yoda',
              'darth-vader-bg-img': i === 1 || savedPeople[i].name === 'Darth Vader',
-             'obi-wan-kenobi-bg-img': i === 2 || savedPeople[i].name === 'Obi-Wan Kenobi',
-             'rotated': isRotated
+             'obi-wan-kenobi-bg-img': i === 2 || savedPeople[i].name === 'Obi-Wan Kenobi'
            }"
            class="p-6 md:h-614 md:w-283 w-full h-full rounded-[10px] shadow-star-wars-card content-end fade-in rotate-card"
            [@rotate]="getRotationState(i)">
