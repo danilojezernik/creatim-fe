@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { SwapiService } from "../../../services/api/swapi.service"
 import { catchError, forkJoin, map, Observable, of, tap } from "rxjs"
-import { SpinnerComponent } from "../../../shared/spinner/spinner/spinner.component"
+import { SpinnerComponent } from "../../../shared/components/spinner/spinner.component"
 import { People } from "../../../models/people"
 import {
   desiredNames,
