@@ -4,10 +4,16 @@ import { SwapiService } from "../../../services/api/swapi.service"
 import { catchError, forkJoin, map, Observable, of, tap } from "rxjs"
 import { SpinnerComponent } from "../../../shared/spinner/spinner/spinner.component"
 import { People } from "../../../models/people"
-import { desiredNames, editFields, noDataDarthVader } from "../../../shared/global_variables/global.const"
+import {
+  desiredNames,
+  editFields,
+  LocalStorageKeys,
+  noDataDarthVader
+} from "../../../shared/global_variables/global.const"
 import { SoundPlayerService } from "../../../services/sound-player/sound-player.service"
 import { FormsModule } from "@angular/forms"
 import { animate, state, style, transition, trigger } from "@angular/animations";
+import { LocalStorageService } from "../../../services/local-storage/local-storage.service";
 
 /**
  * HomeComponent represents the main component of the application.
@@ -36,6 +42,8 @@ export class HomeComponent implements OnInit {
 
   /** Inject SoundPlayerService instance for playing sound effects */
   private _soundPlayer = inject(SoundPlayerService)
+
+  private _localStorageService = inject(LocalStorageService)
 
   /** Observable to hold data for Yoda, Darth Vader, and Obi-Wan Kenobi */
   peopleAllThree$!: Observable<People[]>
@@ -80,7 +88,7 @@ export class HomeComponent implements OnInit {
      * Uses 'of' to create an observable from the saved people data in local storage,
      * or an empty array if no data is found.
      */
-    const savedPeopleFromLocalStorage$ = of(JSON.parse(localStorage.getItem('savedPeople') || '[]'));
+    const savedPeopleFromLocalStorage$ = of(this._localStorageService.getSavedPeople(LocalStorageKeys.SAVED_PEOPLE));
 
     /**
      * Create an array of observables, each fetching data for a specific Jedi name.
@@ -110,15 +118,12 @@ export class HomeComponent implements OnInit {
 
         // Extract data from local storage
         const localStorageData = results[0] as People[];
-        console.log('Local storage data: ', localStorageData);
 
         // Extract data from API responses
         const apiData = results.slice(1).flat() as People[];
-        console.log('API data: ', apiData);
 
         // Create an array to store unique people data, starting with local storage data
         const uniquePeople = [ ...localStorageData ];
-        console.log('Unique data: ', uniquePeople);
 
         /**
          * Iterate over API data and check if each person is already in the uniquePeople array.
@@ -130,7 +135,6 @@ export class HomeComponent implements OnInit {
           }
         });
 
-        console.log('Unique data 2: ', uniquePeople);
         return uniquePeople;
       }),
       tap((people) => {
@@ -139,10 +143,7 @@ export class HomeComponent implements OnInit {
         this.spinner = false; // Hide loading spinner
         this.savedPeople = people; // Update savedPeople array
         this.originalPeople = people.map(person => ({ ...person })); // Store a copy of original data
-        localStorage.setItem('savedPeople', JSON.stringify(people)); // Save data to local storage
-
-        console.log('this.people: ', this.savedPeople);
-        console.log('this original people: ', this.originalPeople);
+        this._localStorageService.setSavedPeople(LocalStorageKeys.SAVED_PEOPLE, people) // Save data to local storage
 
         // Play a sound if no data is fetched
         if (people.length === 0) {
@@ -171,7 +172,6 @@ export class HomeComponent implements OnInit {
   toggleEditMode(index: number) {
     this.editModes[index] = !this.editModes[index] // Toggle edit mode
     this.originalPeople[index] = { ...this.savedPeople[index] } // Save original data
-    console.log('original people toggle: ', this.originalPeople[index])
   }
 
   /**
@@ -182,9 +182,8 @@ export class HomeComponent implements OnInit {
     this.editModes[index] = false // Exit edit mode
     this.savedPeople[index] = { ...this.savedPeople[index] } // Save edited data
 
-    console.log('This saved people index saveEdit: ', this.savedPeople[index])
     // Update localStorage with savedPeople data
-    localStorage.setItem('savedPeople', JSON.stringify(this.savedPeople))
+    this._localStorageService.setSavedPeople(LocalStorageKeys.SAVED_PEOPLE, this.savedPeople)
   }
 
   /**
@@ -194,9 +193,8 @@ export class HomeComponent implements OnInit {
   cancelEdit(index: number) {
     this.editModes[index] = false // Exit edit mode
     this.savedPeople[index] = { ...this.originalPeople[index] } // Revert changes
-    console.log('This saved people index cancelEdit: ', this.savedPeople[index])
 
     // Update localStorage with reverted changes
-    localStorage.setItem('savedPeople', JSON.stringify(this.savedPeople))
+    this._localStorageService.setSavedPeople(LocalStorageKeys.SAVED_PEOPLE, this.savedPeople)
   }
 }

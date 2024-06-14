@@ -2,7 +2,7 @@
  * Predefined list of desired names to fetch specific data from the SWAPI API.
  * This array contains the names of characters for whom data needs to be fetched.
  */
-export const desiredNames = ['yoda', 'darth vader', 'obi-wan kenobi'];
+export const desiredNames = [ 'yoda', 'darth vader', 'obi-wan kenobi' ];
 
 /**
  * Image path to the 'no data' placeholder image.
@@ -27,3 +27,12 @@ export const editFields = [
   { label: 'Birth year', modelProperty: 'birth_year', suffix: '' },
   { label: 'Gender', modelProperty: 'gender', suffix: '' }
 ];
+
+/**
+ * Enum for local storage keys used in the application.
+ * This enum defines the keys that are used to store and retrieve data from local storage.
+ * Using an enum helps to avoid hardcoding string literals throughout the code, making it more maintainable and less error-prone.
+ */
+export enum LocalStorageKeys {
+  SAVED_PEOPLE = 'savedPeople' // Key used to store and retrieve the array of saved people
+}
