@@ -5,11 +5,11 @@
     <div class="container justify-center flex flex-col gap-6 md:px-20 md:pt-32 md:pb-5 px-6 pt-10 pb-5 md:flex-row">
 
       <!-- Loop through the first three people and display their data - START -->
-      <div *ngFor="let jedi of people.slice(0, 3); let i = index"
+      <div *ngFor="let jedi of people; let i = index"
            [ngClass]="{
-             'yoda-bg-img': i === 0 || savedPeople[i].name === 'Yoda',
-             'darth-vader-bg-img': i === 1 || savedPeople[i].name === 'Darth Vader',
-             'obi-wan-kenobi-bg-img': i === 2 || savedPeople[i].name === 'Obi-Wan Kenobi'
+             'yoda-bg-img': i === 0 || jedi.name === 'Yoda',
+             'darth-vader-bg-img': i === 1 || jedi.name === 'Darth Vader',
+             'obi-wan-kenobi-bg-img': i === 2 || jedi.name === 'Obi-Wan Kenobi'
            }"
            class="p-6 md:h-614 md:w-283 w-full h-full rounded-[10px] shadow-star-wars-card content-end fade-in rotate-card"
            [@rotate]="getRotationState(i)">
@@ -17,12 +17,10 @@
         <!-- Custom card component for displaying and editing Jedi details - START -->
         <app-card
           [jedi]="jedi"
-          [index]="i"
-          [editFields]="editFields"
           [editMode]="editModes[i]"
-          (toggleEdit)="toggleEditMode($event)"
-          (saveEdit)="saveEdited($event)"
-          (cancelEdit)="cancelEdit($event)"
+          (toggleEdit)="toggleEditMode(i)"
+          (saveEdit)="saveEdited(i)"
+          (cancelEdit)="cancelEdit(i)"
         />
         <!-- Custom card component for displaying and editing Jedi details - END -->
 

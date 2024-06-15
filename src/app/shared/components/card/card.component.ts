@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from "@angular/forms";
 import { People } from "../../../models/people";
-import { buttonText } from "../../global_variables/global.const";
+import { buttonText, editFields } from "../../global_variables/global.const";
 
 @Component({
   selector: 'app-card',
@@ -19,16 +19,10 @@ export class CardComponent {
   @Input() jedi!: People;
 
   /**
-   * Input property to receive the index of the current Jedi in the list.
-   * Used to identify which Jedi is being interacted with.
-   */
-  @Input() index!: number;
-
-  /**
    * Input property to receive the list of fields that can be edited.
    * Each field specifies the label, model property, and suffix (if any).
    */
-  @Input() editFields!: any[];
+  editFields = editFields
 
   /**
    * Input property to determine if the current Jedi is in edit mode.
@@ -59,7 +53,7 @@ export class CardComponent {
    * Emits the toggleEdit event with the index of the current Jedi.
    */
   toggleEditMode() {
-    this.toggleEdit.emit(this.index);
+    this.toggleEdit.emit();
   }
 
   /**
@@ -67,7 +61,7 @@ export class CardComponent {
    * Emits the saveEdit event with the index of the current Jedi.
    */
   saveEdited() {
-    this.saveEdit.emit(this.index);
+    this.saveEdit.emit();
   }
 
   /**
@@ -75,7 +69,7 @@ export class CardComponent {
    * Emits the cancelEdit event with the index of the current Jedi.
    */
   cancelEdited() {
-    this.cancelEdit.emit(this.index);
+    this.cancelEdit.emit();
   }
 
   /**

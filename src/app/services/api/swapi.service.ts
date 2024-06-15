@@ -23,9 +23,14 @@ export class SwapiService {
    */
   getAllDataForPeople(name: string): Observable<People[]> {
 
+    /**
+     * Check if the requested Jedi is already stored in local storage
+     * If found, return the local data as an Observable
+     */
     const localJedi = this._localStorageService.getJediByName(name)
     if (localJedi)
       return of([ localJedi ])
+
     /**
      * Make an HTTP GET request to the SWAPI people endpoint with search parameter
      * The expected response type is an object containing a 'results' array of People
@@ -36,16 +41,31 @@ export class SwapiService {
        */
       map(response => response.results),
 
+      /**
+       * Additional mapping to handle specific data processing
+       * - Throw an error if no data is found
+       * - Set the Jedi's id to their name for consistency
+       */
       map((data) => {
-
+        /**
+         * Check if the data array is empty.
+         * If no results are found, throw an error with a custom message.
+         */
         if (data.length == 0) {
-          throw new Error('The Jedi you are looking for is not here!')
+          throw new Error('The Jedi you are looking for is not here!');
         }
 
-        const jedi = data[0]
-        jedi.id = jedi.name
+        /**
+         * Extract the first Jedi from the data array.
+         * Set the Jedi's id property to their name for consistency and identification.
+         */
+        const jedi = data[0];
+        jedi.id = jedi.name;
 
-        return data
+        /**
+         * Return the processed data array.
+         */
+        return data;
       }),
 
       /**
