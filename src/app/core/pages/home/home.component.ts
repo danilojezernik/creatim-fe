@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common'
 import { SwapiService } from "../../../services/api/swapi.service"
 import { catchError, forkJoin, map, Observable, of, tap } from "rxjs"
 import { SpinnerComponent } from "../../../shared/components/spinner/spinner.component"
-import { People } from "../../../models/people"
+import { Person } from "../../../models/person"
 import {
   desiredNames,
   editFields,
@@ -48,13 +48,13 @@ export class HomeComponent implements OnInit {
   private _localStorageService = inject(LocalStorageService)
 
   /** Observable to hold data for Yoda, Darth Vader, and Obi-Wan Kenobi */
-  peopleAllThree$!: Observable<People[]>
+  peopleAllThree$!: Observable<Person[]>
 
   /** Array to store the current edited version of People data */
-  savedPeople: People[] = []
+  savedPeople: Person[] = []
 
   /** Array to store the original People data fetched from API or localStorage */
-  originalPeople: People[] = []
+  originalPeople: Person[] = []
 
   /** Path to the image file for displaying when no data is available for Darth Vader */
   protected readonly noDataDarthVader = noDataDarthVader
@@ -86,30 +86,17 @@ export class HomeComponent implements OnInit {
     this.spinner = true;
 
     /**
-     * Create an array of observables, each fetching data for a specific Jedi name.
-     * If an error occurs while fetching data for a specific name, it logs the error and returns an empty array.
-     */
-    const observables = desiredNames.map(name =>
-      this._peopleService.getAllDataForPeople(name).pipe(
-        catchError(error => {
-          console.error('Error fetching data for:', name, error.message);
-          return of([] as People[]); // Return empty array in case of error
-        })
-      )
-    );
-
-    /**
      * Use forkJoin to combine the results from all observables.
      * Map the results to merge unique data from both local storage and API responses.
      */
-    this.peopleAllThree$ = forkJoin(observables).pipe(
+    this.peopleAllThree$ = this._peopleService.getPeopleByName(desiredNames).pipe(
       map(results => {
 
         // Extract data from local storage
-        const localStorageData = results[0] as People[];
+        const localStorageData = results[0] as Person[];
 
         // Extract data from API responses
-        const apiData = results.slice(1).flat() as People[];
+        const apiData = results.slice(1).flat() as Person[];
 
         // Create an array to store unique people data, starting with local storage data
         const uniquePeople = [ ...localStorageData ];
@@ -145,7 +132,7 @@ export class HomeComponent implements OnInit {
         console.error('Error: ', error);
         this.spinner = false; // Hide loading spinner
         this.errorMessage = ''; // Clear error message
-        return of([] as People[]); // Return an empty array in case of error
+        return of([] as Person[]); // Return an empty array in case of error
       })
     );
   }
@@ -180,7 +167,6 @@ export class HomeComponent implements OnInit {
 
     // Save edited data
     const editedPerson = { ...this.savedPeople[index] };
-    this.savedPeople[index] = editedPerson;
 
     // Update localStorage with savedPeople data
     this._localStorageService.setSavedPeople(this.savedPeople);
@@ -198,9 +184,5 @@ export class HomeComponent implements OnInit {
    */
   cancelEdit(index: number) {
     this.editModes[index] = false // Exit edit mode
-    this.savedPeople[index] = { ...this.originalPeople[index] } // Revert changes
-
-    // Update localStorage with reverted changes
-    this._localStorageService.setSavedPeople(this.savedPeople)
   }
 }

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core'
 import { HttpClient, HttpErrorResponse } from "@angular/common/http"
-import { catchError, map, Observable, of, throwError } from "rxjs"
-import { People } from "../../models/people"
+import { catchError, forkJoin, map, Observable, of, throwError } from "rxjs"
+import { Person } from "../../models/person"
 import { environment } from "../../../environments/environment"
 import { LocalStorageService } from "../local-storage/local-storage.service";
 
@@ -19,9 +19,9 @@ export class SwapiService {
   /**
    * Method to get specific people data from the SWAPI API based on name search
    * @param name - the name to search for
-   * @returns Observable<People[]> - an observable emitting an array of People
+   * @returns Observable<Person[]> - an observable emitting an array of Person
    */
-  getAllDataForPeople(name: string): Observable<People[]> {
+  getAllDataForPeople(name: string): Observable<Person[]> {
 
     /**
      * Check if the requested Jedi is already stored in local storage
@@ -33,9 +33,9 @@ export class SwapiService {
 
     /**
      * Make an HTTP GET request to the SWAPI people endpoint with search parameter
-     * The expected response type is an object containing a 'results' array of People
+     * The expected response type is an object containing a 'results' array of Person objects.
      */
-    return this._http.get<{ results: People[] }>(`${environment.url}/?search=${name}`).pipe(
+    return this._http.get<{ results: Person[] }>(`${environment.url}/?search=${name}`).pipe(
       /**
        * Use map operator to extract the 'results' array from the response
        */
@@ -47,6 +47,7 @@ export class SwapiService {
        * - Set the Jedi's id to their name for consistency
        */
       map((data) => {
+
         /**
          * Check if the data array is empty.
          * If no results are found, throw an error with a custom message.
@@ -81,4 +82,30 @@ export class SwapiService {
       })
     )
   }
+
+  /**
+   * Method to fetch data for multiple people based on their names.
+   * @param names - an array of names to search for.
+   * @returns Observable<Person[][]> - an observable emitting an array of arrays of Person objects.
+   */
+  getPeopleByName(names: string[]) {
+    /**
+     * Create an array of observables, each fetching data for a specific Jedi name.
+     * If an error occurs while fetching data for a specific name, it logs the error and returns an empty array.
+     */
+    const observables = names.map(name =>
+      this.getAllDataForPeople(name).pipe(
+        catchError(error => {
+          console.error('Error fetching data for:', name, error.message);
+          return of([] as Person[]); // Return empty array in case of error
+        })
+      )
+    );
+
+    /**
+     * Use forkJoin to combine multiple observables into one observable emitting an array of arrays of Person objects.
+     */
+    return forkJoin(observables)
+  }
+
 }

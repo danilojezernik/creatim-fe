@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from "@angular/forms";
-import { People } from "../../../models/people";
+import { Person } from "../../../models/person";
 import { buttonText, editFields } from "../../global_variables/global.const";
 
 @Component({
@@ -16,13 +16,13 @@ export class CardComponent {
    * Input property to receive a Jedi object.
    * This object contains the details of the Jedi to be displayed or edited.
    */
-  @Input() jedi!: People;
+  @Input() jedi!: Person;
 
   /**
    * Input property to receive the list of fields that can be edited.
    * Each field specifies the label, model property, and suffix (if any).
    */
-  editFields = editFields
+  editFields = editFields;
 
   /**
    * Input property to determine if the current Jedi is in edit mode.
@@ -32,25 +32,25 @@ export class CardComponent {
 
   /**
    * Output event emitter to notify when the edit mode should be toggled.
-   * Emits the index of the current Jedi to the parent component.
+   * Emits the event to the parent component without any specific index.
    */
-  @Output() toggleEdit = new EventEmitter<number>();
+  @Output() toggleEdit = new EventEmitter<void>();
 
   /**
    * Output event emitter to notify when the edited details should be saved.
-   * Emits the index of the current Jedi to the parent component.
+   * Emits the event to the parent component without any specific index.
    */
-  @Output() saveEdit = new EventEmitter<number>();
+  @Output() saveEdit = new EventEmitter<void>();
 
   /**
    * Output event emitter to notify when the editing should be canceled.
-   * Emits the index of the current Jedi to the parent component.
+   * Emits the event to the parent component without any specific index.
    */
-  @Output() cancelEdit = new EventEmitter<number>();
+  @Output() cancelEdit = new EventEmitter<void>();
 
   /**
    * Method to toggle the edit mode of the current Jedi.
-   * Emits the toggleEdit event with the index of the current Jedi.
+   * Emits the toggleEdit event to the parent component.
    */
   toggleEditMode() {
     this.toggleEdit.emit();
@@ -58,7 +58,7 @@ export class CardComponent {
 
   /**
    * Method to save the edited details of the current Jedi.
-   * Emits the saveEdit event with the index of the current Jedi.
+   * Emits the saveEdit event to the parent component.
    */
   saveEdited() {
     this.saveEdit.emit();
@@ -66,7 +66,7 @@ export class CardComponent {
 
   /**
    * Method to cancel the editing of the current Jedi.
-   * Emits the cancelEdit event with the index of the current Jedi.
+   * Emits the cancelEdit event to the parent component.
    */
   cancelEdited() {
     this.cancelEdit.emit();

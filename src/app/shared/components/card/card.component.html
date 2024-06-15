@@ -30,7 +30,7 @@
   <ng-container *ngFor="let editField of editFields">
     <p class="gap-2 fade-in md:text-lg text-sm">
       {{ editField.label }}:
-      <input type="text" [(ngModel)]="jedi[editField.modelProperty]"
+      <input [type]="editField.type" [(ngModel)]="jedi[editField.modelProperty]"
              class="bg-transparent border-b w-7/12 font-bold"> {{ editField.suffix }}
       <br>
     </p>

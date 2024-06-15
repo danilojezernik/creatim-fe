@@ -2,8 +2,11 @@
  * Interface representing a person from the Star Wars API (SWAPI).
  * Each property corresponds to an attribute of a character.
  */
-export interface People {
+export interface Person {
 
+  /**
+   * The unique identifier for the person.
+   */
   id: string
 
   /**

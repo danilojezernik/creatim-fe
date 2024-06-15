@@ -13,19 +13,20 @@ export const noDataDarthVader = './assets/media/no-data/darth-vader-no-data.png'
 /**
  * Array defining editable fields for Jedi details.
  * Each object in the array specifies:
+ * - type: The type of the input field.
  * - label: The display name of the field.
  * - modelProperty: The corresponding property name in the 'People' object.
  * - suffix: The unit or additional text to display after the value (if any).
  */
 export const editFields = [
-  { label: 'Name', modelProperty: 'name', suffix: '' },
-  { label: 'Height', modelProperty: 'height', suffix: 'cm' },
-  { label: 'Mass', modelProperty: 'mass', suffix: 'kg' },
-  { label: 'Hair color', modelProperty: 'hair_color', suffix: '' },
-  { label: 'Skin color', modelProperty: 'skin_color', suffix: '' },
-  { label: 'Eye color', modelProperty: 'eye_color', suffix: '' },
-  { label: 'Birth year', modelProperty: 'birth_year', suffix: '' },
-  { label: 'Gender', modelProperty: 'gender', suffix: '' }
+  { type: 'text', label: 'Name', modelProperty: 'name', suffix: '' },
+  { type: 'number', label: 'Height', modelProperty: 'height', suffix: 'cm' },
+  { type: 'number', label: 'Mass', modelProperty: 'mass', suffix: 'kg' },
+  { type: 'text', label: 'Hair color', modelProperty: 'hair_color', suffix: '' },
+  { type: 'text', label: 'Skin color', modelProperty: 'skin_color', suffix: '' },
+  { type: 'text', label: 'Eye color', modelProperty: 'eye_color', suffix: '' },
+  { type: 'text', label: 'Birth year', modelProperty: 'birth_year', suffix: '' },
+  { type: 'text', label: 'Gender', modelProperty: 'gender', suffix: '' }
 ];
 
 /**
