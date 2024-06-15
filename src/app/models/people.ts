@@ -3,6 +3,9 @@
  * Each property corresponds to an attribute of a character.
  */
 export interface People {
+
+  id: string
+
   /**
    * The name of the person.
    * Example: "Luke Skywalker"

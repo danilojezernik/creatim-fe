@@ -2,7 +2,7 @@
  * Predefined list of desired names to fetch specific data from the SWAPI API.
  * This array contains the names of characters for whom data needs to be fetched.
  */
-export const desiredNames = [ 'yoda', 'darth vader', 'obi-wan kenobi' ];
+export const desiredNames = [ 'Yoda', 'Darth Vader', 'Obi-Wan Kenobi' ];
 
 /**
  * Image path to the 'no data' placeholder image.

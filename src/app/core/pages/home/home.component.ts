@@ -86,13 +86,6 @@ export class HomeComponent implements OnInit {
     this.spinner = true;
 
     /**
-     * Observable to fetch saved people data from local storage.
-     * Uses 'of' to create an observable from the saved people data in local storage,
-     * or an empty array if no data is found.
-     */
-    const savedPeopleFromLocalStorage$ = of(this._localStorageService.getSavedPeople(LocalStorageKeys.SAVED_PEOPLE));
-
-    /**
      * Create an array of observables, each fetching data for a specific Jedi name.
      * If an error occurs while fetching data for a specific name, it logs the error and returns an empty array.
      */
@@ -106,16 +99,10 @@ export class HomeComponent implements OnInit {
     );
 
     /**
-     * Combine the observable fetching data from local storage with the observables fetching data from the SWAPI API.
-     * This ensures that data is fetched from both sources.
-     */
-    const combinedObservables = [ savedPeopleFromLocalStorage$, ...observables ];
-
-    /**
      * Use forkJoin to combine the results from all observables.
      * Map the results to merge unique data from both local storage and API responses.
      */
-    this.peopleAllThree$ = forkJoin(combinedObservables).pipe(
+    this.peopleAllThree$ = forkJoin(observables).pipe(
       map(results => {
 
         // Extract data from local storage
@@ -145,7 +132,7 @@ export class HomeComponent implements OnInit {
         this.spinner = false; // Hide loading spinner
         this.savedPeople = people; // Update savedPeople array
         this.originalPeople = people.map(person => ({ ...person })); // Store a copy of original data
-        this._localStorageService.setSavedPeople(LocalStorageKeys.SAVED_PEOPLE, people) // Save data to local storage
+        this._localStorageService.setSavedPeople(people) // Save data to local storage
 
         // Play a sound if no data is fetched
         if (people.length === 0) {
@@ -196,7 +183,7 @@ export class HomeComponent implements OnInit {
     this.savedPeople[index] = editedPerson;
 
     // Update localStorage with savedPeople data
-    this._localStorageService.setSavedPeople(LocalStorageKeys.SAVED_PEOPLE, this.savedPeople);
+    this._localStorageService.setSavedPeople(this.savedPeople);
 
     // Check if name has changed
     if (editedPerson.name !== this.originalPeople[index].name) {
@@ -214,6 +201,6 @@ export class HomeComponent implements OnInit {
     this.savedPeople[index] = { ...this.originalPeople[index] } // Revert changes
 
     // Update localStorage with reverted changes
-    this._localStorageService.setSavedPeople(LocalStorageKeys.SAVED_PEOPLE, this.savedPeople)
+    this._localStorageService.setSavedPeople(this.savedPeople)
   }
 }
