@@ -168,7 +168,7 @@ export class HomeComponent implements OnInit {
     this._localStorageService.setSavedPeople(this.savedPeople);
 
     // Check if name has changed
-    if (editedPerson.name !== this.originalPeople[index].name) {
+    if (editedPerson.name !== this.originalPeople[index].name && editedPerson.id === 'Yoda') {
       // Play sound indicating name change
       this._soundPlayer.playSoundNameChange();
     }
