@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http"
 import { catchError, forkJoin, map, Observable, of, throwError } from "rxjs"
 import { Person } from "../../models/person"
 import { environment } from "../../../environments/environment"
-import { LocalStorageService } from "../local-storage/local-storage.service";
+import { LocalStorageService } from "../local-storage/local-storage.service"
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +14,16 @@ export class SwapiService {
    * Inject HttpClient instance for making HTTP requests
    */
   private _http = inject(HttpClient)
+
+  /**
+   * Inject LocalStorageService instance for accessing local storage data.
+   */
   private _localStorageService = inject(LocalStorageService)
 
   /**
-   * Method to get specific people data from the SWAPI API based on name search
-   * @param name - the name to search for
-   * @returns Observable<Person[]> - an observable emitting an array of Person
+   * Method to get specific people data from the SWAPI API based on name search.
+   * @param name - the name to search for.
+   * @returns Observable<Person[]> - an observable emitting an array of Person objects.
    */
   getAllDataForPeople(name: string): Observable<Person[]> {
 
@@ -36,6 +40,7 @@ export class SwapiService {
      * The expected response type is an object containing a 'results' array of Person objects.
      */
     return this._http.get<{ results: Person[] }>(`${environment.url}/?search=${name}`).pipe(
+
       /**
        * Use map operator to extract the 'results' array from the response
        */
@@ -53,20 +58,20 @@ export class SwapiService {
          * If no results are found, throw an error with a custom message.
          */
         if (data.length == 0) {
-          throw new Error('The Jedi you are looking for is not here!');
+          throw new Error('The Jedi you are looking for is not here!')
         }
 
         /**
          * Extract the first Jedi from the data array.
          * Set the Jedi's id property to their name for consistency and identification.
          */
-        const jedi = data[0];
-        jedi.id = jedi.name;
+        const jedi = data[0]
+        jedi.id = jedi.name
 
         /**
          * Return the processed data array.
          */
-        return data;
+        return data
       }),
 
       /**
@@ -75,7 +80,7 @@ export class SwapiService {
        * @returns Observable that throws a custom error message
        */
       catchError((error: HttpErrorResponse) => {
-        // Handle the error based on your application's requirements
+        // Log the error for debugging purposes.
         console.error('Error fetching data:', error.message)
         // Throwing a custom error message to be caught by the component
         return throwError('Data not available. Please try again later or contact us.')
@@ -96,11 +101,11 @@ export class SwapiService {
     const observables = names.map(name =>
       this.getAllDataForPeople(name).pipe(
         catchError(error => {
-          console.error('Error fetching data for:', name, error.message);
-          return of([] as Person[]); // Return empty array in case of error
+          console.error('Error fetching data for:', name, error.message)
+          return of([] as Person[]) // Return empty array in case of error
         })
       )
-    );
+    )
 
     /**
      * Use forkJoin to combine multiple observables into one observable emitting an array of arrays of Person objects.

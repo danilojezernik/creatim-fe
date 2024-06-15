@@ -1,3 +1,4 @@
+<!-- Home, main or index component - START -->
 <ng-container *ngIf="peopleAllThree$ | async as people; else loadingData">
 
   <!-- Container to display data when it is successfully loaded and not empty - START -->
@@ -40,6 +41,7 @@
   <!-- Container to display an image if no data is available or there is an error - END -->
 
 </ng-container>
+<!-- Home, main or index component - END -->
 
 <!-- Template to display a loading spinner while data is being fetched - START -->
 <ng-template #loadingData>

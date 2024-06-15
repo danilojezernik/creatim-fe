@@ -1,13 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { SwapiService } from "../../../services/api/swapi.service"
-import { catchError, forkJoin, map, Observable, of, tap } from "rxjs"
+import { catchError, map, Observable, of, tap } from "rxjs"
 import { SpinnerComponent } from "../../../shared/components/spinner/spinner.component"
 import { Person } from "../../../models/person"
 import {
   desiredNames,
-  editFields,
-  LocalStorageKeys,
   noDataDarthVader
 } from "../../../shared/global_variables/global.const"
 import { SoundPlayerService } from "../../../services/sound-player/sound-player.service"
@@ -38,6 +36,7 @@ import { CardComponent } from "../../../shared/components/card/card.component";
   ]
 })
 export class HomeComponent implements OnInit {
+
   /** Inject SwapiService instance for fetching data from SWAPI API */
   private _peopleService = inject(SwapiService)
 
@@ -59,11 +58,8 @@ export class HomeComponent implements OnInit {
   /** Path to the image file for displaying when no data is available for Darth Vader */
   protected readonly noDataDarthVader = noDataDarthVader
 
-  /** Array defining editable fields for Jedi details */
-  protected readonly editFields = editFields
-
   /** Error message to display if any error occurs during data fetching */
-  errorMessage: string | undefined
+  errorMessage!: boolean
 
   /** Array to track the edit mode status for each Jedi card */
   editModes: boolean[] = [ false, false, false ]
@@ -131,7 +127,7 @@ export class HomeComponent implements OnInit {
         // Handle errors during data fetching
         console.error('Error: ', error);
         this.spinner = false; // Hide loading spinner
-        this.errorMessage = ''; // Clear error message
+        this.errorMessage = false; // Clear error message
         return of([] as Person[]); // Return an empty array in case of error
       })
     );

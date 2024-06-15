@@ -5,7 +5,7 @@
     <!-- Loop through editFields to display details - START -->
     <ng-container *ngFor="let detail of editFields">
       {{ detail.label }}:
-      <b> {{ jedi[detail.modelProperty] }} {{ detail.suffix }}</b><br>
+      <b> <span class="text-shadow-custom">{{ jedi[detail.modelProperty] }} {{ detail.suffix }}</span></b><br>
     </ng-container>
     <!-- Loop through editFields to display details - END -->
 
@@ -28,10 +28,10 @@
 
   <!-- Loop through editFields to display input fields for editing - START -->
   <ng-container *ngFor="let editField of editFields">
-    <p class="gap-2 fade-in md:text-lg text-sm">
+    <p class="gap-2 fade-in md:text-lg text-sm text-shadow-custom">
       {{ editField.label }}:
       <input [type]="editField.type" [(ngModel)]="jedi[editField.modelProperty]"
-             class="bg-transparent border-b w-7/12 font-bold"> {{ editField.suffix }}
+             class="bg-transparent text-shadow-custom border-b w-7/12 font-bold"> {{ editField.suffix }}
       <br>
     </p>
   </ng-container>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { spinnerText } from "../../global_variables/global.const";
 
 @Component({
   selector: 'app-spinner',
@@ -9,4 +10,5 @@ import { CommonModule } from '@angular/common';
 })
 export class SpinnerComponent {
 
+  protected readonly spinnerText = spinnerText
 }

@@ -26,7 +26,8 @@ module.exports = {
       boxShadow: {
         'star-wars-card': '0px 0px 250px 0px #E3D61D66',
         'edit-btn': '0 0 30px 0 #E3D61D4D',
-        'cancel-btn': '0 0 15px 0 #f10e10'
+        'cancel-btn': '0 0 15px 0 #f10e10',
+        'text': '2px 2px 2px black'
       },
       // Extend colors utility with a custom background color for edit button.
       colors: {
@@ -36,8 +37,20 @@ module.exports = {
       // Extend textColor utility with an important black color variant.
       textColor: {
         'black-imp': '#000000!important'
-      }
+      },
     }
   },
-  plugins: [],
+  plugins: [
+    // Plugin to add a custom text shadow utility class
+    function ({ addUtilities }) {
+      const newUtilities = {
+        '.text-shadow-custom': {
+          textShadow: '2px 2px 2px black', // Custom text shadow for specific use cases
+        },
+      };
+
+      // Dynamically add the new utilities to Tailwind CSS
+      addUtilities(newUtilities, ['responsive', 'hover']);
+    },
+  ],
 }

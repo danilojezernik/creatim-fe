@@ -2,13 +2,13 @@
  * Predefined list of desired names to fetch specific data from the SWAPI API.
  * This array contains the names of characters for whom data needs to be fetched.
  */
-export const desiredNames = [ 'Yoda', 'Darth Vader', 'Obi-Wan Kenobi' ];
+export const desiredNames = [ 'Yoda', 'Darth Vader', 'Obi-Wan Kenobi' ]
 
 /**
  * Image path to the 'no data' placeholder image.
  * This image is displayed when no data is available for the requested characters.
  */
-export const noDataDarthVader = './assets/media/no-data/darth-vader-no-data.png';
+export const noDataDarthVader = './assets/media/no-data/darth-vader-no-data.png'
 
 /**
  * Array defining editable fields for Jedi details.
@@ -27,7 +27,7 @@ export const editFields = [
   { type: 'text', label: 'Eye color', modelProperty: 'eye_color', suffix: '' },
   { type: 'text', label: 'Birth year', modelProperty: 'birth_year', suffix: '' },
   { type: 'text', label: 'Gender', modelProperty: 'gender', suffix: '' }
-];
+]
 
 /**
  * Enum for local storage keys used in the application.
@@ -39,12 +39,18 @@ export enum LocalStorageKeys {
 }
 
 /**
- * Enum for button texts used in the application.
+ * Enum for button text used in the application.
  * This enum defines the texts used for different buttons such as save, edit, and cancel.
- * Using an enum helps to maintain consistency and avoid hardcoding string literals.
+ * Using an enum helps to avoid hardcoding string literals throughout the code, making it more maintainable and less error-prone.
  */
 export enum buttonText {
   SAVE = 'Save',
   EDIT = 'Edit',
   CANCEL = 'Cancel'
+}
+
+
+export const spinnerText = {
+  LOADING_TEXT: 'Loading',
+  LOADING_TITLE: 'Star Wars loader'
 }
