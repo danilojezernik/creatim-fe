@@ -49,8 +49,31 @@ export enum buttonText {
   CANCEL = 'Cancel'
 }
 
-
+/**
+ * Constants for spinner text used in the loading spinner component.
+ */
 export const spinnerText = {
   LOADING_TEXT: 'Loading',
   LOADING_TITLE: 'Star Wars loader'
+}
+
+/**
+ * Enum for predefined character names used in the sound player service.
+ * This enum defines the names of characters for which sounds are played.
+ */
+export enum howlPerson {
+  DARTH_VADER = 'Darth Vader',
+  YODA = 'Yoda',
+  OBI_WAN_KENOBI = 'Obi-Wan Kenobi'
+}
+
+/**
+ * Enum for paths to sound files used in the sound player service.
+ * This enum defines the paths to sound files that correspond to specific character name changes.
+ */
+export enum howlPath {
+  DESTROY = 'assets/sound/destroy.mp3',
+  DARTH_VADER = 'assets/sound/darth-vader-name-change.mp3',
+  YODA = 'assets/sound/yoda-name-change.mp3',
+  OBI_WAN_KENOBI = 'assets/sound/obi-wan-kenobi-name-change.mp3'
 }

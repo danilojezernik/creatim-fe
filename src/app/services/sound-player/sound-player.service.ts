@@ -1,8 +1,12 @@
 /**
  * Injectable service for playing sound effects using the Howler library.
+ * This service handles the initialization and playback of various sound effects
+ * associated with specific events or actions within the application.
  */
+
 import { Injectable } from '@angular/core';
 import { Howl } from "howler";
+import { howlPath } from "../../shared/global_variables/global.const";
 
 @Injectable({
   providedIn: 'root'
@@ -10,30 +14,46 @@ import { Howl } from "howler";
 export class SoundPlayerService {
 
   /**
-   * Initialize a new Howl instance with the path to the 'no data' sound file.
+   * An object containing Howl instances for different sound effects.
+   * Each key corresponds to a specific sound effect, and the value is a Howl instance
+   * initialized with the path to the respective sound file.
    */
-  soundNoData = new Howl({
-    src: ['assets/sound/destroy.mp3']
-  });
-
-  /**
-   * Initialize a new Howl instance with the path to the 'name change' sound file.
-   */
-  soundNameChange = new Howl({
-    src: ['assets/sound/traitor-no-name-change.mp3']
-  });
-
-  /**
-   * Plays the 'no data' sound effect using the Howl instance.
-   */
-  playSoundNoData() {
-    this.soundNoData.play();
+  private sounds = {
+    soundNoData: new Howl({ src: [ howlPath.DESTROY ] }),
+    soundNameChangeDarthVader: new Howl({ src: [ howlPath.DARTH_VADER ] }),
+    soundNameChangeYoda: new Howl({ src: [ howlPath.YODA ] }),
+    soundNameChangeObiWanKenobi: new Howl({ src: [ howlPath.OBI_WAN_KENOBI ] })
   }
 
   /**
-   * Plays the 'name change' sound effect using the Howl instance.
+   * Plays the 'no data' sound effect.
+   * This method is called when no data is available or an error occurs while fetching data.
    */
-  playSoundNameChange() {
-    this.soundNameChange.play();
+  playSoundNoData() {
+    this.sounds.soundNoData.play();
+  }
+
+  /**
+   * Plays the sound effect for Darth Vader's name change.
+   * This method is called when the name of Darth Vader is changed in the application.
+   */
+  playSoundNameChangeDarthVader() {
+    this.sounds.soundNameChangeDarthVader.play();
+  }
+
+  /**
+   * Plays the sound effect for Yoda's name change.
+   * This method is called when the name of Yoda is changed in the application.
+   */
+  playSoundNameChangeYoda() {
+    this.sounds.soundNameChangeYoda.play();
+  }
+
+  /**
+   * Plays the sound effect for Obi-Wan Kenobi's name change.
+   * This method is called when the name of Obi-Wan Kenobi is changed in the application.
+   */
+  playSoundNameChangeObiWanKenobi() {
+    this.sounds.soundNameChangeObiWanKenobi.play();
   }
 }

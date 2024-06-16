@@ -4,10 +4,7 @@ import { SwapiService } from "../../../services/api/swapi.service"
 import { catchError, map, Observable, of, tap } from "rxjs"
 import { SpinnerComponent } from "../../../shared/components/spinner/spinner.component"
 import { Person } from "../../../models/person"
-import {
-  desiredNames,
-  noDataDarthVader
-} from "../../../shared/global_variables/global.const"
+import { desiredNames, howlPerson, noDataDarthVader } from "../../../shared/global_variables/global.const"
 import { SoundPlayerService } from "../../../services/sound-player/sound-player.service"
 import { FormsModule } from "@angular/forms"
 import { animate, state, style, transition, trigger } from "@angular/animations";
@@ -167,11 +164,21 @@ export class HomeComponent implements OnInit {
     // Update localStorage with savedPeople data
     this._localStorageService.setSavedPeople(this.savedPeople);
 
-    // Check if name has changed
-    if (editedPerson.name !== this.originalPeople[index].name && editedPerson.id === 'Yoda') {
-      // Play sound indicating name change
-      this._soundPlayer.playSoundNameChange();
+    // Create a map of sounds to be played based on the Jedi character
+    const soundMap: any = {
+      [howlPerson.DARTH_VADER]: () => this._soundPlayer.playSoundNameChangeDarthVader(),
+      [howlPerson.YODA]: () => this._soundPlayer.playSoundNameChangeYoda(),
+      [howlPerson.OBI_WAN_KENOBI]: () => this._soundPlayer.playSoundNameChangeObiWanKenobi()
     }
+
+    // Check if the name has changed and play the corresponding sound
+    if (editedPerson.name !== this.originalPeople[index].name) {
+      const playSound = soundMap[editedPerson.id]
+      if (playSound) {
+        playSound();
+      }
+    }
+
   }
 
   /**
