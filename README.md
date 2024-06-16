@@ -16,6 +16,20 @@ Additionally, the application features sound effects triggered when users intera
 - [Angular v16](https://v16.angular.io/docs)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Howler.js](https://howlerjs.com/)
+- [101SoundBoards.com](https://101soundboards.com)
+
+# Starting aplication
+
+Install node modules
+```bash
+npm install
+```
+
+Run command:
+
+```bash
+ng serve
+```
 
 ## 🛠 Skills for this frontend projects
 
