@@ -1,7 +1,7 @@
 # Creatim FrontEnd Assignment
 
 [![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://danilojezernik.com/)
-[![linkedin](https://img.shields.io/badge/facebook-0A66C2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.linkedin.com/in/danilojezernik/)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/danilojezernik/)
 [![instagram](https://img.shields.io/badge/instagram-red?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/danilojezernik)
 
 This is example application of my assignment for Creatim.
