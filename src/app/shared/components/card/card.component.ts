@@ -4,6 +4,20 @@ import { FormsModule } from "@angular/forms";
 import { Person } from "../../../models/person";
 import { buttonText, editFields } from "../../global_variables/global.const";
 
+/**
+ * CardComponent represents a card UI element for displaying and editing Jedi details.
+ *
+ * This component allows displaying a Jedi's details and provides an interface to edit the details.
+ * It handles toggling the edit mode, saving edits, and canceling edits. The component uses input
+ * properties to receive data and output events to communicate actions to the parent component.
+ *
+ * The main functionalities included are:
+ *
+ * - `toggleEditMode()`: Toggles the edit mode for the current Jedi and emits an event to the parent component.
+ * - `saveEdited()`: Saves the edited details of the current Jedi and emits an event to the parent component.
+ * - `cancelEdited()`: Cancels the editing of the current Jedi and emits an event to the parent component.
+ */
+
 @Component({
   selector: 'app-card',
   standalone: true,

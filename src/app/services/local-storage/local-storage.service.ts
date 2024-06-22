@@ -1,6 +1,18 @@
-import { Injectable } from '@angular/core';
-import { LocalStorageKeys } from "../../shared/global_variables/global.const";
-import { Person } from "../../models/person";
+import { Injectable } from '@angular/core'
+import { LocalStorageKeys } from "../../shared/global_variables/global.const"
+import { Person } from "../../models/person"
+
+/**
+ * Service for managing people data in local storage.
+ *
+ * This service provides functionality to save, retrieve, and update data of people stored in the browser's local storage.
+ * The main functions included are:
+ *
+ * - `getSavedPeople()`: Retrieves an array of saved people from local storage.
+ * - `updatePerson(index: number, person: Person)`: Updates a specific person in local storage by index.
+ * - `setSavedPeople(array: Person[])`: Saves an array of people to local storage, clearing any previously saved data.
+ * - `getJediByName(name: string)`: Retrieves a person (specifically referred to as a Jedi) from local storage based on their name.
+ */
 
 @Injectable({
   providedIn: 'root'
@@ -12,23 +24,52 @@ export class LocalStorageService {
    * @returns An array of saved people, or an empty array if no data is found.
    */
   getSavedPeople(): Person[] {
-    // Retrieve the data from local storage using the provided key.
-    const data = localStorage.getItem(LocalStorageKeys.SAVED_PEOPLE);
+    const people: Person[] = []
+    let index = 0
 
-    /**
-     * If data is found, parse it from JSON format and return it as an array of Person objects.
-     * If no data is found, return an empty array.
-     */
-    return data ? JSON.parse(data) : [];
+    // Loop to retrieve saved people data from local storage
+    while (true) {
+      const data = localStorage.getItem(`${LocalStorageKeys.SAVED_PEOPLE}_${index}`)
+      if (!data) break
+      people.push(...JSON.parse(data))
+      index++
+    }
+
+    return people
+  }
+
+  /**
+   * Updates a specific person in local storage.
+   * @param index - The index of the person to be updated.
+   * @param person - The updated person object.
+   */
+  updatePerson(index: number, person: Person): void {
+    // Convert the person object to JSON format and save it to local storage
+    localStorage.setItem(`${LocalStorageKeys.SAVED_PEOPLE}_${index}`, JSON.stringify([person]))
   }
 
   /**
    * Saves an array of people to local storage.
-   * @param array - The array of people to be saved.
+   * This method first clears any previously saved data in the local storage
+   * for the given key, then saves each person in the provided array
+   * as a separate item in the local storage.
+   *
+   * @param array - The array of people to be saved. Each person in the array will be stored
+   *                in local storage under a unique key.
    */
   setSavedPeople(array: Person[]): void {
-    // Convert the array of Person objects to JSON format and save it to local storage using the provided key.
-    localStorage.setItem(LocalStorageKeys.SAVED_PEOPLE, JSON.stringify(array));
+
+    // Clear existing data in local storage for saved people
+    let index = 0;
+    while (localStorage.getItem(`${LocalStorageKeys.SAVED_PEOPLE}_${index}`)) {
+      localStorage.removeItem(`${LocalStorageKeys.SAVED_PEOPLE}_${index}`);
+      index++;
+    }
+
+    // Save each person in the array to local storage, using a unique key for each person
+    array.forEach((person, index) => {
+      localStorage.setItem(`${LocalStorageKeys.SAVED_PEOPLE}_${index}`, JSON.stringify([person]));
+    });
   }
 
   /**
@@ -43,6 +84,6 @@ export class LocalStorageService {
    */
   getJediByName(name: string): Person | undefined {
     // Retrieve the saved people array and find the Jedi object matching the provided name (case-insensitive).
-    return this.getSavedPeople().find((jedi) => jedi.id.toLowerCase() == name.toLowerCase());
+    return this.getSavedPeople().find((jedi) => jedi.id.toLowerCase() == name.toLowerCase())
   }
 }

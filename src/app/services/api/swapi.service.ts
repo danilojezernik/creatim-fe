@@ -1,9 +1,21 @@
 import { inject, Injectable } from '@angular/core'
 import { HttpClient, HttpErrorResponse } from "@angular/common/http"
-import { catchError, forkJoin, map, Observable, of, throwError } from "rxjs"
+import { catchError, forkJoin, map, mergeMap, Observable, of, throwError, toArray } from "rxjs"
 import { Person } from "../../models/person"
 import { environment } from "../../../environments/environment"
 import { LocalStorageService } from "../local-storage/local-storage.service"
+
+/**
+ * Service for interacting with the SWAPI (Star Wars API) to fetch data about people.
+ *
+ * This service provides functionality to search for people by name and retrieve their data from the SWAPI API.
+ * It also checks local storage for cached data before making API requests. The main functions included are:
+ *
+ * - `getAllDataForPeople(name: string)`: Searches for a person by name and retrieves their data from the SWAPI API.
+ *   If the person is found in local storage, it returns the local data instead.
+ * - `getPeopleByName(names: string[])`: Searches for multiple people by their names and retrieves their data from the SWAPI API.
+ *   This method handles errors gracefully by returning an empty array for names that encounter an error during the fetch process.
+ */
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +52,6 @@ export class SwapiService {
      * The expected response type is an object containing a 'results' array of Person objects.
      */
     return this._http.get<{ results: Person[] }>(`${environment.url}/?search=${name}`).pipe(
-
       /**
        * Use map operator to extract the 'results' array from the response
        */
@@ -90,8 +101,8 @@ export class SwapiService {
 
   /**
    * Method to fetch data for multiple people based on their names.
-   * @param names - an array of names to search for.
-   * @returns Observable<Person[][]> - an observable emitting an array of arrays of Person objects.
+   * @param names - An array of names to search for.
+   * @returns Observable<Person[]> - An observable emitting an array of Person objects.
    */
   getPeopleByName(names: string[]) {
     /**
@@ -109,8 +120,14 @@ export class SwapiService {
 
     /**
      * Use forkJoin to combine multiple observables into one observable emitting an array of arrays of Person objects.
+     * Flatten the array of arrays into a single array of Person objects.
      */
-    return forkJoin(observables)
+    return forkJoin(observables).pipe(
+      mergeMap(results => results), // Flatten the array of arrays
+      mergeMap(personArray => personArray), // Flatten the inner arrays
+      toArray() // Collect all items into a single array
+    );
   }
+
 
 }

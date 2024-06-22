@@ -2,6 +2,13 @@
  * Injectable service for playing sound effects using the Howler library.
  * This service handles the initialization and playback of various sound effects
  * associated with specific events or actions within the application.
+ *
+ * The main functionalities included are:
+ *
+ * - `playSoundNoData()`: Plays the 'no data' sound effect, called when no data is available or an error occurs while fetching data.
+ * - `playSoundNameChangeDarthVader()`: Plays the sound effect for Darth Vader's name change, called when the name of Darth Vader is changed in the application.
+ * - `playSoundNameChangeYoda()`: Plays the sound effect for Yoda's name change, called when the name of Yoda is changed in the application.
+ * - `playSoundNameChangeObiWanKenobi()`: Plays the sound effect for Obi-Wan Kenobi's name change, called when the name of Obi-Wan Kenobi is changed in the application.
  */
 
 import { Injectable } from '@angular/core';

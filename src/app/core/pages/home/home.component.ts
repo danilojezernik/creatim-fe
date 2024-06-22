@@ -7,14 +7,23 @@ import { Person } from "../../../models/person"
 import { desiredNames, howlPerson, noDataDarthVader } from "../../../shared/global_variables/global.const"
 import { SoundPlayerService } from "../../../services/sound-player/sound-player.service"
 import { FormsModule } from "@angular/forms"
-import { animate, state, style, transition, trigger } from "@angular/animations";
-import { LocalStorageService } from "../../../services/local-storage/local-storage.service";
-import { CardComponent } from "../../../shared/components/card/card.component";
+import { animate, state, style, transition, trigger } from "@angular/animations"
+import { LocalStorageService } from "../../../services/local-storage/local-storage.service"
+import { CardComponent } from "../../../shared/components/card/card.component"
 
 /**
  * HomeComponent represents the main component of the application.
- * It fetches and displays data related to Jedi characters, allowing
- * users to edit their details and handles data loading and error states.
+ * It fetches and displays data related to Jedi characters, allowing users
+ * to edit their details, and handles data loading and error states.
+ *
+ * This component includes the following functionalities:
+ *
+ * - `ngOnInit()`: Initializes the component and fetches desired Jedi data on load.
+ * - `getDesiredJedies()`: Fetches data for predefined Jedi names, manages loading state, errors, and local storage operations.
+ * - `getRotationState(index: number)`: Determines the rotation state of a card based on its edit mode for CSS animations.
+ * - `toggleEditMode(index: number)`: Toggles the edit mode for a specific Jedi card.
+ * - `saveEdited(index: number)`: Saves the edited data for a specific Jedi card and updates local storage.
+ * - `cancelEdit(index: number)`: Cancels the edit mode and reverts changes for a specific Jedi card.
  */
 
 @Component({
@@ -76,7 +85,7 @@ export class HomeComponent implements OnInit {
    */
   getDesiredJedies() {
     // Set spinner to true to show loading spinner while fetching data
-    this.spinner = true;
+    this.spinner = true
 
     /**
      * Use forkJoin to combine the results from all observables.
@@ -85,49 +94,43 @@ export class HomeComponent implements OnInit {
     this.peopleAllThree$ = this._peopleService.getPeopleByName(desiredNames).pipe(
       map(results => {
 
-        // Extract data from local storage
-        const localStorageData = results[0] as Person[];
+        // Retrieve data from local storage
+        const localStorageData = this._localStorageService.getSavedPeople()
 
-        // Extract data from API responses
-        const apiData = results.slice(1).flat() as Person[];
+        // Create a unique list of people combining local storage and API results
+        const uniquePeople = [ ...localStorageData ]
 
-        // Create an array to store unique people data, starting with local storage data
-        const uniquePeople = [ ...localStorageData ];
-
-        /**
-         * Iterate over API data and check if each person is already in the uniquePeople array.
-         * If not, add them to ensure uniqueness based on name.
-         */
-        apiData.forEach(person => {
+        // Add API results to the list if they are not already present
+        results.forEach(person => {
           if (!uniquePeople.some(p => p.name === person.name)) {
-            uniquePeople.push(person);
+            uniquePeople.push(person)
           }
-        });
+        })
 
-        return uniquePeople;
+        return uniquePeople
       }),
       tap((people) => {
 
         // Update component state after data is fetched successfully
-        this.spinner = false; // Hide loading spinner
-        this.savedPeople = people; // Update savedPeople array
-        this.originalPeople = people.map(person => ({ ...person })); // Store a copy of original data
+        this.spinner = false // Hide loading spinner
+        this.savedPeople = people // Update savedPeople array
+        this.originalPeople = people.map(person => ({ ...person })) // Store a copy of original data
         this._localStorageService.setSavedPeople(people) // Save data to local storage
 
         // Play a sound if no data is fetched
         if (people.length === 0) {
-          this._soundPlayer.playSoundNoData();
+          this._soundPlayer.playSoundNoData()
         }
 
       }),
       catchError(error => {
         // Handle errors during data fetching
-        console.error('Error: ', error);
-        this.spinner = false; // Hide loading spinner
-        this.errorMessage = false; // Clear error message
-        return of([] as Person[]); // Return an empty array in case of error
+        console.error('Error: ', error)
+        this.spinner = false // Hide loading spinner
+        this.errorMessage = false // Clear error message
+        return of([] as Person[]) // Return an empty array in case of error
       })
-    );
+    )
   }
 
   /**
@@ -139,7 +142,7 @@ export class HomeComponent implements OnInit {
    * @returns The rotation state as a string, either 'rotated' or 'default'.
    */
   getRotationState(index: number): string {
-    return this.editModes[index] ? 'rotated' : 'default';
+    return this.editModes[index] ? 'rotated' : 'default'
   }
 
   /**
@@ -156,13 +159,13 @@ export class HomeComponent implements OnInit {
    * @param index The index of the Jedi card being edited.
    */
   saveEdited(index: number) {
-    this.editModes[index] = false; // Exit edit mode
+    this.editModes[index] = false // Exit edit mode
 
     // Save edited data
-    const editedPerson = { ...this.savedPeople[index] };
+    const editedPerson = { ...this.savedPeople[index] }
 
     // Update localStorage with savedPeople data
-    this._localStorageService.setSavedPeople(this.savedPeople);
+    this._localStorageService.updatePerson(index, editedPerson)
 
     // Create a map of sounds to be played based on the Jedi character
     const soundMap: any = {
@@ -175,7 +178,7 @@ export class HomeComponent implements OnInit {
     if (editedPerson.name !== this.originalPeople[index].name) {
       const playSound = soundMap[editedPerson.id]
       if (playSound) {
-        playSound();
+        playSound()
       }
     }
 
