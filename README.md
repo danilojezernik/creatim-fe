@@ -18,7 +18,7 @@ Additionally, the application features sound effects triggered when users intera
 - [Howler.js](https://howlerjs.com/)
 - [101SoundBoards.com](https://101soundboards.com)
 
-# Starting aplication
+# Starting application
 
 Install node modules
 ```bash
@@ -68,7 +68,7 @@ I leverage Tailwind CSS to ensure responsiveness across mobile devices. This is 
 
 ### Local Storage
 
-Local Storage is used to store and retrieve data within the browser, offering a capacity of 5-10 MB per domain. For larger storage needs, IndexedDB is a more suitable option, allowing storage up to 50 MB and beyond, depending on the browser and available disk space.
+[Local Storage](https://www.freecodecamp.org/news/use-local-storage-in-modern-applications/) is used to store and retrieve data within the browser, offering a capacity of 5-10 MB per domain. For larger storage needs, IndexedDB is a more suitable option, allowing storage up to 50 MB and beyond, depending on the browser and available disk space.
 
 ### Sound
 
